@@ -64,9 +64,55 @@ public class PosRing implements Cloneable {
 	}
 	@Override
 	public String toString() {
+		/*
 		return "PosRing [XFrom=" + XFrom + ", YFrom=" + YFrom + ", XTo=" + XTo
 				+ ", YTo=" + YTo + ", XDelete=" + XDelete + ", YDelete="
 				+ YDelete + "]";
+		*/
+		return "PosRing ["
+				+(XFrom>=0 ? "XFrom=" + XFrom +", " : "")
+				+(YFrom>=0 ? "YFrom=" + YFrom +", " : "")
+				+(XTo>=0 ? "XTo=" + XTo +", " : "")
+				+(YTo>=0 ? "YTo=" + YTo +", " : "")
+				+(XDelete>=0 ? "XDelete=" + XDelete +", " : "")
+				+(YDelete>=0 ? "YDelete=" + YDelete +", " : "")+"]";
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + XDelete;
+		result = prime * result + XFrom;
+		result = prime * result + XTo;
+		result = prime * result + YDelete;
+		result = prime * result + YFrom;
+		result = prime * result + YTo;
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PosRing other = (PosRing) obj;
+		if (XDelete != other.XDelete)
+			return false;
+		if (XFrom != other.XFrom)
+			return false;
+		if (XTo != other.XTo)
+			return false;
+		if (YDelete != other.YDelete)
+			return false;
+		if (YFrom != other.YFrom)
+			return false;
+		if (YTo != other.YTo)
+			return false;
+		return true;
 	}
 
+	
 }

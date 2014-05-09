@@ -14,7 +14,7 @@ public class MillsGame implements Game<MillsState, PosRing, String> {
 	@Override
 	public MillsState getInitialState() {
 		 //TODO da rivedere
-		return new MillsState(1,5);
+		return new MillsState(1,8);
 	}
 
 	@Override

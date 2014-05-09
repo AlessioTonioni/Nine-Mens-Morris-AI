@@ -2,7 +2,10 @@ package gioco;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class MillsState implements Cloneable{
 	private static final int ROW=3;
@@ -20,18 +23,21 @@ public class MillsState implements Cloneable{
 	private int turno;
 
 	private int n;
+	
+	private List<PosRing> prevMoves;
 
 	public int getTurno() {
 		return turno;
 	}
 
-	public MillsState(int[][] board, int pedineMin, int pedineMax, int pedineDisponibili, int turno, int n){
+	public MillsState(int[][] board, int pedineMin, int pedineMax, int pedineDisponibili, int turno, int n, List<PosRing> prevMoves){
 		this.turno=turno;
 		this.n=n;
 		this.board=board;
 		this.pedineDisponibili=pedineDisponibili;
 		this.pedineMin=pedineMin;
 		this.pedineMax=pedineMax;
+		this.prevMoves = prevMoves;
 	}
 
 	public MillsState(int turno, int n){
@@ -44,10 +50,15 @@ public class MillsState implements Cloneable{
 		pedineMin=0;
 		pedineMax=0;
 		this.n=n;
+		this.prevMoves = new ArrayList<PosRing>();
+	}
+	
+	public void reset(int n) {
+		this.n = n;
 	}
 
 	public List<PosRing> getNextMoves() {
-		if(pedineDisponibili>0)
+		if(isFaseUno())
 			return getNextMovesFirst();
 		else if((pedineMin>3 && turno==-1) || (pedineMax>3 && turno==1))
 			return GetNextMovesSecond();
@@ -57,7 +68,7 @@ public class MillsState implements Cloneable{
 
 	private List<PosRing> getNextMovesFirst() {
 		List<PosRing> result=new ArrayList<PosRing>();
-		generateWarp(-1,-1,result);
+		generateWarpFirst(-1,-1,result);
 		return result;
 	}
 
@@ -77,7 +88,7 @@ public class MillsState implements Cloneable{
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==turno){ //mia pedina
-					generateWarp(i,j,result);
+					generateWarpThird(i,j,result);
 				}
 			}
 		return result;
@@ -92,6 +103,15 @@ public class MillsState implements Cloneable{
 					(board[(ring+1)%ROW][pos]==self && board[(ring+2)%ROW][pos]==self);		
 		}
 	}
+	
+	private boolean checkMills(int ringFrom, int posFrom, int ring, int pos, int self) {
+		board[ringFrom][posFrom] = VUOTO;
+		boolean result = checkMills(ring, pos, self);
+		board[ringFrom][posFrom] = self;
+		
+		return result;
+	}
+	
 	private void generateDeletables(PosRing temp, List<PosRing> result) {
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
@@ -119,7 +139,7 @@ public class MillsState implements Cloneable{
 	private void moveRing(int row, int pos, List<PosRing> result) {
 		if(board[row][(pos+1)%COLUMN]==VUOTO){
 			PosRing temp=new PosRing(row,pos,row,(pos+1)%COLUMN,-1,-1);
-			if(checkMills(row,(pos+1)%COLUMN,turno)){   //se la mossa genera un tris
+			if(checkMills(row, pos, row,(pos+1)%COLUMN,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
 			} else {   //mossa senza mangiata
 				result.add(temp);
@@ -128,7 +148,7 @@ public class MillsState implements Cloneable{
 
 		if(board[row][(pos+COLUMN-1)%COLUMN]==VUOTO){
 			PosRing temp=new PosRing(row,pos,row,(pos+COLUMN-1)%COLUMN,-1,-1);	
-			if(checkMills(row,(pos+COLUMN-1)%COLUMN,turno)){   //se la mossa genera un tris
+			if(checkMills(row, pos, row,(pos+COLUMN-1)%COLUMN,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
 			} else {   //mossa senza mangiata		
 				result.add(temp);
@@ -139,7 +159,7 @@ public class MillsState implements Cloneable{
 		if(board[(row-1)%ROW][pos] == VUOTO) {
 			PosRing temp=new PosRing(row,pos,(row-1)%ROW, pos,-1,-1);
 
-			if(checkMills((row-1)%ROW,pos,turno)){   //se la mossa genera un tris
+			if(checkMills(row, pos, (row-1)%ROW,pos,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
 			} else {   //mossa senza mangiata		
 				result.add(temp);
@@ -150,7 +170,7 @@ public class MillsState implements Cloneable{
 		if(board[(row+1)%ROW][pos] == VUOTO) {
 			PosRing temp=new PosRing(row,pos,(row+1)%ROW, pos,-1,-1);
 
-			if(checkMills((row+1)%ROW,pos,turno)){   //se la mossa genera un tris
+			if(checkMills(row, pos, (row+1)%ROW,pos,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
 			} else {   //mossa senza mangiata		
 				result.add(temp);
@@ -158,7 +178,7 @@ public class MillsState implements Cloneable{
 		}
 
 	}
-	private void generateWarp(int rowFrom,int posFrom,List<PosRing> result){
+	private void generateWarpFirst(int rowFrom,int posFrom,List<PosRing> result){
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==VUOTO){
@@ -172,8 +192,20 @@ public class MillsState implements Cloneable{
 				}
 			}
 	}
+	private void generateWarpThird(int rowFrom,int posFrom,List<PosRing> result){
+		for(int i=0; i<ROW; i++)
+			for(int j=0; j<COLUMN; j++){
+				if(board[i][j]==VUOTO){
+					PosRing temp=new PosRing(rowFrom,posFrom,i,j,-1,-1);
 
-
+					if(checkMills(rowFrom, posFrom, i,j, turno)){
+						generateDeletables(temp,result);
+					} else {
+						result.add(temp);
+					}
+				}
+			}
+	}
 
 	public void movePiece(PosRing action){
 		board[action.getXTo()][action.getYTo()]=turno; //pedine spostata o warpata
@@ -200,6 +232,10 @@ public class MillsState implements Cloneable{
 
 		turno=-turno;
 		n=n-1;
+		prevMoves.add(action);
+		if(prevMoves.size() > 12) {
+			prevMoves.remove(0);
+		}
 	}
 
 	public MillsState performAction(PosRing action) {
@@ -216,17 +252,28 @@ public class MillsState implements Cloneable{
 	}
 
 	public double getUtility(){
+		if(pedineMin<3 && isFaseDue()) {
+			return 1000;
+		} else if(pedineMax<3 && isFaseDue()) {
+			return -1000;
+		} else if(isPatta()){
+			return 0;
+		}
+		
 		getEuristica();
 		return turno*minMaxValue;
 	}
 
 	private void getEuristica() {
 		double result=0;
-		int TrisCons=1;
+		int myTrisCons=5;
+		int advTrisCons = 5;
+		int availableCons = 3;
+		int pedineCons = 10;
 		int pedineMie=(turno==1)?pedineMax:pedineMin;
 		int pedineSue=(turno!=1)?pedineMax:pedineMin;
-		result+=AvailableMoves(turno)+pedineMie+TrisCons*numberOfMills(turno);
-		result-=AvailableMoves(-turno)+pedineSue+TrisCons*numberOfMills(-turno);
+		result+=availableCons*availableMoves(turno)+pedineCons*pedineMie+myTrisCons*numberOfMills(turno);
+		result-=availableCons*availableMoves(-turno)+pedineCons*pedineSue+advTrisCons*numberOfMills(-turno);
 		minMaxValue=result;
 		//minMaxValue=10;
 	}
@@ -235,16 +282,30 @@ public class MillsState implements Cloneable{
 		int[][] newBoard=new int[ROW][COLUMN];
 		for(int i=0; i<ROW; i++)
 			newBoard[i]=Arrays.copyOf(board[i], board[i].length);
-		return new MillsState(newBoard, pedineMin,pedineMax,pedineDisponibili, turno,n);
+		List<PosRing> copyList = new ArrayList<PosRing>();
+		for(PosRing pos : prevMoves) {
+			copyList.add(pos);
+		}
+		return new MillsState(newBoard, pedineMin,pedineMax,pedineDisponibili, turno,n, copyList);
 	}
 
 	public boolean isTerminal() {
-		boolean a = (n<=0 || (pedineMin<3 && pedineDisponibili<0) || (pedineMax<3 && pedineDisponibili<0));
+		boolean a = (n<=0 || (pedineMin<3 && isFaseDue()) || (pedineMax<3 && isFaseDue()) || isPatta() 
+				//|| (availableMoves(-turno) == 0 && pedineDisponibili<0) || (availableMoves(turno) == 0 && pedineDisponibili<0)
+				);
 		return a;
-		//TODO isPatta 
 	}
 
-	private int AvailableMoves(int mioTurno){
+	private boolean isPatta() {
+		if(isFaseUno()){
+			return false;
+		}
+		boolean result= prevMoves.get(0).equals(prevMoves.get(4)) && prevMoves.get(0).equals(prevMoves.get(8));
+		result &=  prevMoves.get(1).equals(prevMoves.get(5)) && prevMoves.get(1).equals(prevMoves.get(9));
+		return result;
+	}
+
+	private int availableMoves(int mioTurno){
 		List<PosRing> res=new ArrayList<PosRing>();
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
@@ -253,7 +314,7 @@ public class MillsState implements Cloneable{
 			}
 		return res.size();
 	}
-
+	
 	private int numberOfMills(int mioTurno){
 		int result=0;
 		result+=(checkMills(0,0,mioTurno))?1:0;
@@ -267,6 +328,18 @@ public class MillsState implements Cloneable{
 		return result;
 	}
 
+	private boolean isFaseDue(){
+		return pedineDisponibili<=0;
+	}
+	
+	private boolean isFaseUno(){
+		return pedineDisponibili>0;
+	}
+	
+	private boolean isFaseTre(){
+		return (pedineDisponibili<=0 && pedineMax<3 || pedineDisponibili<=0 && pedineMin<3);
+	}
+	
 	@Override
 	public String toString() {
 		String temp="";
@@ -290,7 +363,7 @@ public class MillsState implements Cloneable{
 				newBoard[i][j] = -board[i][j];
 			}
 		}
-		return new MillsState(newBoard, pedineMax, pedineMin, pedineDisponibili, -turno, n);
+		return new MillsState(newBoard, pedineMax, pedineMin, pedineDisponibili, -turno, n, prevMoves);
 	}
 
 }
