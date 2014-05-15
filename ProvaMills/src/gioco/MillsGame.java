@@ -4,10 +4,10 @@ import java.util.List;
 
 import aima.core.search.adversarial.Game;
 
-public class MillsGame implements Game<MillsState, PosRing, String> {
+public class MillsGame implements Game<MillsState, MillsAction, String> {
 
 	@Override
-	public List<PosRing> getActions(MillsState currentState) {
+	public List<MillsAction> getActions(MillsState currentState) {
 		return currentState.getNextMoves();
 	}
 
@@ -28,7 +28,7 @@ public class MillsGame implements Game<MillsState, PosRing, String> {
 	}
 
 	@Override
-	public MillsState getResult(MillsState currentState, PosRing action) {
+	public MillsState getResult(MillsState currentState, MillsAction action) {
 		return currentState.performAction(action);
 	}
 

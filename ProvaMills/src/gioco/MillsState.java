@@ -24,13 +24,13 @@ public class MillsState implements Cloneable{
 
 	private int n;
 	
-	private List<PosRing> prevMoves;
+	private List<MillsAction> prevMoves;
 
 	public int getTurno() {
 		return turno;
 	}
 
-	public MillsState(int[][] board, int pedineMin, int pedineMax, int pedineDisponibili, int turno, int n, List<PosRing> prevMoves){
+	public MillsState(int[][] board, int pedineMin, int pedineMax, int pedineDisponibili, int turno, int n, List<MillsAction> prevMoves){
 		this.turno=turno;
 		this.n=n;
 		this.board=board;
@@ -50,14 +50,14 @@ public class MillsState implements Cloneable{
 		pedineMin=0;
 		pedineMax=0;
 		this.n=n;
-		this.prevMoves = new ArrayList<PosRing>();
+		this.prevMoves = new ArrayList<MillsAction>();
 	}
 	
 	public void reset(int n) {
 		this.n = n;
 	}
 
-	public List<PosRing> getNextMoves() {
+	public List<MillsAction> getNextMoves() {
 		if(isFaseUno())
 			return getNextMovesFirst();
 		else if((pedineMin>3 && turno==-1) || (pedineMax>3 && turno==1))
@@ -66,14 +66,14 @@ public class MillsState implements Cloneable{
 			return GetNextMovesThird();
 	}
 
-	private List<PosRing> getNextMovesFirst() {
-		List<PosRing> result=new ArrayList<PosRing>();
+	private List<MillsAction> getNextMovesFirst() {
+		List<MillsAction> result=new ArrayList<MillsAction>();
 		generateWarpFirst(-1,-1,result);
 		return result;
 	}
 
-	private List<PosRing> GetNextMovesSecond() {
-		List<PosRing> result=new ArrayList<PosRing>();
+	private List<MillsAction> GetNextMovesSecond() {
+		List<MillsAction> result=new ArrayList<MillsAction>();
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==turno){ //mia pedina
@@ -83,8 +83,8 @@ public class MillsState implements Cloneable{
 		return result;
 	}
 
-	private List<PosRing> GetNextMovesThird() {
-		List<PosRing> result=new ArrayList<PosRing>();
+	private List<MillsAction> GetNextMovesThird() {
+		List<MillsAction> result=new ArrayList<MillsAction>();
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==turno){ //mia pedina
@@ -112,18 +112,18 @@ public class MillsState implements Cloneable{
 		return result;
 	}
 	
-	private void generateDeletables(PosRing temp, List<PosRing> result) {
+	private void generateDeletables(MillsAction temp, List<MillsAction> result) {
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==-turno && !checkMills(i,j, board[i][j])){
-					PosRing next=temp.clone();
+					MillsAction next=temp.clone();
 					next.setXDelete(i);
 					next.setYDelete(j);
 					result.add(next);
 				}
 			}
 	}
-	private void generateAvailableMoves(int row, int pos, List<PosRing> result) {
+	private void generateAvailableMoves(int row, int pos, List<MillsAction> result) {
 		moveRing(row,pos,result);
 		if(pos%2!=0){  //devo controllare anche i tris inter-ring...
 			if(row==0)
@@ -136,9 +136,9 @@ public class MillsState implements Cloneable{
 			}
 		}
 	}
-	private void moveRing(int row, int pos, List<PosRing> result) {
+	private void moveRing(int row, int pos, List<MillsAction> result) {
 		if(board[row][(pos+1)%COLUMN]==VUOTO){
-			PosRing temp=new PosRing(row,pos,row,(pos+1)%COLUMN,-1,-1);
+			MillsAction temp=new MillsAction(row,pos,row,(pos+1)%COLUMN,-1,-1);
 			if(checkMills(row, pos, row,(pos+1)%COLUMN,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
 			} else {   //mossa senza mangiata
@@ -147,7 +147,7 @@ public class MillsState implements Cloneable{
 		}
 
 		if(board[row][(pos+COLUMN-1)%COLUMN]==VUOTO){
-			PosRing temp=new PosRing(row,pos,row,(pos+COLUMN-1)%COLUMN,-1,-1);	
+			MillsAction temp=new MillsAction(row,pos,row,(pos+COLUMN-1)%COLUMN,-1,-1);	
 			if(checkMills(row, pos, row,(pos+COLUMN-1)%COLUMN,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
 			} else {   //mossa senza mangiata		
@@ -155,9 +155,9 @@ public class MillsState implements Cloneable{
 			}
 		}
 	}
-	private void generateMoveUp(int row, int pos, List<PosRing> result) {
+	private void generateMoveUp(int row, int pos, List<MillsAction> result) {
 		if(board[(row-1)%ROW][pos] == VUOTO) {
-			PosRing temp=new PosRing(row,pos,(row-1)%ROW, pos,-1,-1);
+			MillsAction temp=new MillsAction(row,pos,(row-1)%ROW, pos,-1,-1);
 
 			if(checkMills(row, pos, (row-1)%ROW,pos,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
@@ -166,9 +166,9 @@ public class MillsState implements Cloneable{
 			}
 		}
 	}
-	private void generateMoveDown(int row, int pos, List<PosRing> result) {
+	private void generateMoveDown(int row, int pos, List<MillsAction> result) {
 		if(board[(row+1)%ROW][pos] == VUOTO) {
-			PosRing temp=new PosRing(row,pos,(row+1)%ROW, pos,-1,-1);
+			MillsAction temp=new MillsAction(row,pos,(row+1)%ROW, pos,-1,-1);
 
 			if(checkMills(row, pos, (row+1)%ROW,pos,turno)){   //se la mossa genera un tris
 				generateDeletables(temp,result);
@@ -178,11 +178,11 @@ public class MillsState implements Cloneable{
 		}
 
 	}
-	private void generateWarpFirst(int rowFrom,int posFrom,List<PosRing> result){
+	private void generateWarpFirst(int rowFrom,int posFrom,List<MillsAction> result){
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==VUOTO){
-					PosRing temp=new PosRing(rowFrom,posFrom,i,j,-1,-1);
+					MillsAction temp=new MillsAction(rowFrom,posFrom,i,j,-1,-1);
 
 					if(checkMills(i,j, turno)){
 						generateDeletables(temp,result);
@@ -192,11 +192,11 @@ public class MillsState implements Cloneable{
 				}
 			}
 	}
-	private void generateWarpThird(int rowFrom,int posFrom,List<PosRing> result){
+	private void generateWarpThird(int rowFrom,int posFrom,List<MillsAction> result){
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==VUOTO){
-					PosRing temp=new PosRing(rowFrom,posFrom,i,j,-1,-1);
+					MillsAction temp=new MillsAction(rowFrom,posFrom,i,j,-1,-1);
 
 					if(checkMills(rowFrom, posFrom, i,j, turno)){
 						generateDeletables(temp,result);
@@ -207,7 +207,7 @@ public class MillsState implements Cloneable{
 			}
 	}
 
-	public void movePiece(PosRing action){
+	public void movePiece(MillsAction action){
 		board[action.getXTo()][action.getYTo()]=turno; //pedine spostata o warpata
 
 		if(action.getXFrom()!=-1 && action.getYFrom()!=-1)
@@ -238,7 +238,7 @@ public class MillsState implements Cloneable{
 		}
 	}
 
-	public MillsState performAction(PosRing action) {
+	public MillsState performAction(MillsAction action) {
 		MillsState newState=this.clone();
 		newState.movePiece(action);
 		return newState;
@@ -282,8 +282,8 @@ public class MillsState implements Cloneable{
 		int[][] newBoard=new int[ROW][COLUMN];
 		for(int i=0; i<ROW; i++)
 			newBoard[i]=Arrays.copyOf(board[i], board[i].length);
-		List<PosRing> copyList = new ArrayList<PosRing>();
-		for(PosRing pos : prevMoves) {
+		List<MillsAction> copyList = new ArrayList<MillsAction>();
+		for(MillsAction pos : prevMoves) {
 			copyList.add(pos);
 		}
 		return new MillsState(newBoard, pedineMin,pedineMax,pedineDisponibili, turno,n, copyList);
@@ -306,7 +306,7 @@ public class MillsState implements Cloneable{
 	}
 
 	private int availableMoves(int mioTurno){
-		List<PosRing> res=new ArrayList<PosRing>();
+		List<MillsAction> res=new ArrayList<MillsAction>();
 		for(int i=0; i<ROW; i++)
 			for(int j=0; j<COLUMN; j++){
 				if(board[i][j]==mioTurno)

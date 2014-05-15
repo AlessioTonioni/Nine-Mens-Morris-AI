@@ -1,6 +1,6 @@
 package gioco;
 
-public class PosRing implements Cloneable {
+public class MillsAction implements Cloneable {
 
 	private int XFrom;
 	private int YFrom;
@@ -11,7 +11,7 @@ public class PosRing implements Cloneable {
 	private int XDelete;
 	private int YDelete;
 	
-	public PosRing(int xFrom, int yFrom, int xTo, int yTo, int xDelete,
+	public MillsAction(int xFrom, int yFrom, int xTo, int yTo, int xDelete,
 			int yDelete) {
 		super();
 		XFrom = xFrom;
@@ -58,8 +58,8 @@ public class PosRing implements Cloneable {
 		YDelete = yDelete;
 	}
 	@Override
-	public PosRing clone(){
-		PosRing result=new PosRing(XFrom,YFrom,XTo,YTo,XDelete,YDelete);
+	public MillsAction clone(){
+		MillsAction result=new MillsAction(XFrom,YFrom,XTo,YTo,XDelete,YDelete);
 		return result;
 	}
 	@Override
@@ -98,7 +98,7 @@ public class PosRing implements Cloneable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PosRing other = (PosRing) obj;
+		MillsAction other = (MillsAction) obj;
 		if (XDelete != other.XDelete)
 			return false;
 		if (XFrom != other.XFrom)

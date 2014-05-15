@@ -18,8 +18,8 @@ public class TestMain {
 		
 		
 
-		AdversarialSearch<MillsState, PosRing> search;
-		PosRing action;
+		AdversarialSearch<MillsState, MillsAction> search;
+		MillsAction action;
 
 		//search = MinimaxSearch.createFor(gioco);
 
@@ -58,7 +58,7 @@ public class TestMain {
 				int ringDelete = Integer.parseInt(st.nextToken());
 				int posDelete = Integer.parseInt(st.nextToken());
 				
-				PosRing posring = new PosRing(ringFrom, posFrom, ringTo, posTo, ringDelete, posDelete);
+				MillsAction posring = new MillsAction(ringFrom, posFrom, ringTo, posTo, ringDelete, posDelete);
 				MillsState newState = previousState.performAction(posring);
 				
 				action=search.makeDecision(newState);
