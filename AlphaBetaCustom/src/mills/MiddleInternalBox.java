@@ -48,4 +48,33 @@ public class MiddleInternalBox extends Box {
 		return right;
 	}
 
+	@Override
+	protected void setUp(Box newUp) {
+		this.up=newUp;
+	}
+
+	@Override
+	protected void setDown(Box newDown) {
+		return;
+	}
+
+	@Override
+	protected void setLeft(Box newLeft) {
+		this.left=newLeft;
+	}
+
+	@Override
+	protected void setRight(Box newRight) {
+		this.right=newRight;
+	}
+
+	@Override
+	public Box clone() {
+		Box result=new MiddleInternalBox(this.ring, this.pos);
+		result.white=white;
+		result.black=black;
+		result.isOnTris=isOnTris;
+		return result;
+	}
+
 }

@@ -51,4 +51,33 @@ public class CentralBox extends Box {
 		return right;
 	}
 
+	@Override
+	protected void setUp(Box newUp) {
+		up=newUp;
+	}
+
+	@Override
+	protected void setDown(Box newDown) {
+		down=newDown;	
+	}
+
+	@Override
+	protected void setLeft(Box newLeft) {
+		left=newLeft;
+	}
+
+	@Override
+	protected void setRight(Box newRight) {
+		right=newRight;
+	}
+
+	@Override
+	public Box clone() {
+		Box result=new CentralBox(this.ring,this.pos);
+		result.black=this.black;
+		result.white=this.white;
+		result.isOnTris=isOnTris;
+		return result;
+	}
+
 }

@@ -46,12 +46,33 @@ public class CornerBox extends Box {
 		return right;
 	}
 	
+	@Override
 	public void setLeft(Box left){
 		this.left=left;
 	}
 	
+	@Override
 	public void setRight(Box right){
 		this.right=right;
+	}
+
+	@Override
+	protected void setUp(Box newUp) {
+		return;
+	}
+
+	@Override
+	protected void setDown(Box newDown) {
+		return;
+	}
+
+	@Override
+	public Box clone() {
+		Box result=new CornerBox(this.ring,this.pos);
+		result.white=white;
+		result.black=black;
+		result.isOnTris=isOnTris;
+		return result;
 	}
 
 }

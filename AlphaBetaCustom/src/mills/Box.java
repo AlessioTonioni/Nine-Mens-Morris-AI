@@ -41,7 +41,27 @@ public abstract class Box {
 	protected abstract Box left();
 	protected abstract Box right();
 	
+	protected abstract void setUp(Box newUp);
+	protected abstract void setDown(Box newDown);
+	protected abstract void setLeft(Box newLeft);
+	protected abstract void setRight(Box newRight);
+	
+	
 	protected boolean isFree(){
 		return !white && !black;
 	}
+	
+	@Override
+	public abstract Box clone();
+
+	@Override
+	public String toString() {
+		return "Box [ring=" + ring + ", pos=" + pos + ", isOnTris=" + isOnTris
+				+ ", black=" + black + ", white=" + white + ", availableMoves="
+				+ availableMoves + "]";
+	}
+
+	
+
+
 }
