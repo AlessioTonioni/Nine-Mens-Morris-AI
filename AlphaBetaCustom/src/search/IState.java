@@ -6,10 +6,12 @@ public interface IState {
 
 	boolean isMin();
 	boolean isMax();
-	double getValue();  //dovrà ritornarlo se già calcolato, calcolarlo altrimenti
+	double getFinalValue();  //dovrà ritornarlo se già calcolato, calcolarlo altrimenti
+	double getCutValue();
 	void setValue(double value);
 	boolean isTerminal();
 	List<IState> getAvailableMoves();
 	IAction getGeneratingMove();
-
+	void restoreState();
+	void applyAction();
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 import search.IAction;
 import search.IState;
 
-public class MillsState implements IState {
+public class MillsState implements IState{
 	
 	private Map<Integer, Box> free;
 	private Map<Integer, Box> white;

@@ -1,5 +1,9 @@
 package mills;
 
+import java.util.Map;
+
+import prova.MillsBoard;
+
 
 public class CornerBox extends Box {
 
@@ -73,6 +77,23 @@ public class CornerBox extends Box {
 		result.black=black;
 		result.isOnTris=isOnTris;
 		return result;
+	}
+
+	@Override
+	public void connect(Map<Integer, Box> free) {
+		this.left = free.get(MillsBoard.getIndex(ring, (pos+7)%8));
+		this.right = free.get(MillsBoard.getIndex(ring, (pos+1)%8));
+	}
+
+	@Override
+	protected void updateReferences() {
+		left.reset();
+		left.left().reset();
+		right.reset();
+		right.right().reset();
+		
+		left.resetMoves();
+		right.resetMoves();
 	}
 
 }

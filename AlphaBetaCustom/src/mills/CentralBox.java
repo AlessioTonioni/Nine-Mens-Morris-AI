@@ -1,5 +1,9 @@
 package mills;
 
+import java.util.Map;
+
+import prova.MillsBoard;
+
 public class CentralBox extends Box {
 
 	protected Box left;
@@ -80,4 +84,24 @@ public class CentralBox extends Box {
 		return result;
 	}
 
+	@Override
+	public void connect(Map<Integer, Box> free) {
+		this.left = free.get(MillsBoard.getIndex(ring, (pos+7)%8));
+		this.right = free.get(MillsBoard.getIndex(ring, (pos+1)%8));
+		this.up = free.get(MillsBoard.getIndex(0, pos));
+		this.down = free.get(MillsBoard.getIndex(2, pos));		
+	}
+
+	@Override
+	protected void updateReferences() {
+		left.reset();
+		right.reset();
+		up.reset();
+		down.reset();
+		
+		left.resetMoves();
+		right.resetMoves();
+		up.resetMoves();
+		down.resetMoves();
+	}
 }

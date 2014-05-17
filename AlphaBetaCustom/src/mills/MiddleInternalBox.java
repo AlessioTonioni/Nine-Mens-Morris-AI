@@ -1,5 +1,9 @@
 package mills;
 
+import java.util.Map;
+
+import prova.MillsBoard;
+
 public class MiddleInternalBox extends Box {
 
 	protected Box left;
@@ -75,6 +79,25 @@ public class MiddleInternalBox extends Box {
 		result.black=black;
 		result.isOnTris=isOnTris;
 		return result;
+	}
+
+	@Override
+	public void connect(Map<Integer, Box> free) {
+		this.left = free.get(MillsBoard.getIndex(ring, (pos+7)%8));
+		this.right = free.get(MillsBoard.getIndex(ring, (pos+1)%8));
+		this.up = free.get(MillsBoard.getIndex(1, pos));
+	}
+
+	@Override
+	protected void updateReferences() {
+		up.reset();
+		up.up().reset();
+		left.reset();
+		right.reset();
+		
+		left.resetMoves();
+		right.resetMoves();
+		up.resetMoves();
 	}
 
 }

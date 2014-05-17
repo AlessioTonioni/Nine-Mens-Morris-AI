@@ -123,5 +123,10 @@ public class MillsAction implements IAction {
 		return true;
 	}
 	
+	@Override
+	public MillsAction reverse() {
+		MillsAction action = new MillsAction(this.ringTo, this.posTo, this.ringFrom, this.posFrom, -1, -1);
+		return action;
+	}
 
 }
