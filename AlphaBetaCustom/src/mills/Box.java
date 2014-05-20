@@ -1,5 +1,6 @@
 package mills;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,17 +30,24 @@ public abstract class Box {
 		return black;
 	}
 
-	public void setBlack(boolean black) {
-		this.black = black;
+	public void setBlack() {
+		this.black = true;
+		this.white = false;
 		updateReferences();
 	}
-
+	
+	public void setFree(){
+		this.black = false;
+		this.white = false;
+		updateReferences();
+	}
 	public boolean isWhite() {
 		return white;
 	}
 
-	public void setWhite(boolean white) {
-		this.white = white;
+	public void setWhite() {
+		this.white = true;
+		this.black = false;
 		updateReferences();
 	}
 
@@ -50,6 +58,7 @@ public abstract class Box {
 	public int getPos() {
 		return pos;
 	}
+	
 	protected Box(int ring, int pos){
 		this.ring=ring;
 		this.pos=pos;
@@ -65,10 +74,13 @@ public abstract class Box {
 	protected abstract void calculateTris();
 	
 	public List<MillsAction> getPossibleMovements(){
-		if(availableMoves==null)
+		if(availableMoves==null) {
+			this.availableMoves = new ArrayList<MillsAction>();
 			generatePossibleMovements();
+		}
 		return availableMoves;
 	}
+	
 	protected abstract void generatePossibleMovements();	
 	
 	protected boolean isFree(){

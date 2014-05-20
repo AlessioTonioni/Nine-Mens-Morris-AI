@@ -12,11 +12,11 @@ public class MillsBoard {
 
 	private static MillsBoard instance = null;
 
-	private Map<Integer,Box> boxes; 
+	public Map<Integer,Box> boxes; 
 
-	private Map<Integer, Box> free;
-	private Map<Integer, Box> white;
-	private Map<Integer, Box> black;
+	public Map<Integer, Box> free;
+	public Map<Integer, Box> white;
+	public Map<Integer, Box> black;
 
 	private MillsBoard() {
 		free = new HashMap<Integer, Box>();
@@ -43,8 +43,47 @@ public class MillsBoard {
 	}
 
 	public static int getIndex(int ring, int pos){
-		int ciccio = ring*10+pos;
-		return ciccio;
+		return ring*10+pos;
+	}
+	
+	public int getWhite() {
+		return white.size();
+	}
+	
+	public int getBlack() {
+		return black.size();
+	}
+	
+	public int getWhiteAvailableMoves() {
+		int sum = 0;
+		for(Box b: white.values()) {
+			sum+=b.getPossibleMovements().size();
+		}
+		return sum;
+	}
+	
+	public int getBlackAvailableMoves() {
+		int sum = 0;
+		for(Box b: black.values()) {
+			sum+=b.getPossibleMovements().size();
+		}
+		return sum;
+	}
+	
+	public int getWhiteNumberOfTris() {
+		int sum = 0;
+		for(Box b: white.values()) {
+			sum+=(b.isOnTris()?1:0);
+		}
+		return (sum/3)+1;
+	}
+	
+	public int getBlackNumberOfTris() {
+		int sum = 0;
+		for(Box b: black.values()) {
+			sum+=(b.isOnTris()?1:0);
+		}
+		return (sum/3)+((sum%3==0)?0:1);
 	}
 
 	public List<MillsAction> getAvailableMoves(boolean turn, int piecesToPlace, boolean noDelete) {
@@ -70,14 +109,15 @@ public class MillsBoard {
 		if(action.getRingFrom() != -1) {
 			int from = getIndex(action.getRingFrom(), action.getPosFrom());
 			Box newBox = listFrom.get(from);
-			newBox.setBlack(false);
-			newBox.setWhite(false);
+			newBox.setFree();
 		}
 		if(action.getRingTo() != -1) {
 			int to = getIndex(action.getRingTo(), action.getPosTo());
 			Box bFree = listTo.get(to);
-			bFree.setBlack(!turn);
-			bFree.setWhite(turn);
+			if(turn)
+				bFree.setWhite();
+			else
+				bFree.setBlack();
 			return bFree;
 		}
 		return null;
@@ -183,59 +223,81 @@ public class MillsBoard {
 		Map<Integer,Box> from=(turn)?white:black;
 		Map<Integer, Box> to=free;
 
-		int ciccio = getIndex(mossa.getRingTo(), mossa.getPosTo());
-		Box destination=to.get(ciccio);
-		destination.setWhite(turn);
-		destination.setBlack(!turn);
+		Box destination=to.get(getIndex(mossa.getRingTo(), mossa.getPosTo()));
+		if(turn)
+			destination.setWhite();
+		else
+			destination.setBlack();
 		to.remove(getIndex(mossa.getRingTo(), mossa.getPosTo()));
 		from.put(getIndex(mossa.getRingTo(), mossa.getPosTo()),destination);
 
 		if(mossa.getRingFrom()!=-1){
 			Box fromBox=from.get(getIndex(mossa.getRingFrom(), mossa.getPosFrom()));
-			fromBox.setBlack(false);
-			fromBox.setWhite(false);
+			fromBox.setFree();
 			from.remove(getIndex(mossa.getRingFrom(), mossa.getPosFrom()));
 			free.put(getIndex(mossa.getRingFrom(), mossa.getPosFrom()), fromBox);
 		} 
 		if(mossa.getRingDelete()!=-1){
-			Map<Integer,Box> enemy=(!turn)?white:black;
-			Box deletedBox=enemy.get(getIndex(mossa.getRingFrom(), mossa.getPosFrom()));
-			deletedBox.setBlack(false);
-			deletedBox.setWhite(false);
-			enemy.remove(getIndex(mossa.getRingFrom(), mossa.getPosFrom()));
-			free.put(getIndex(mossa.getRingFrom(), mossa.getPosFrom()), deletedBox);
+			Map<Integer,Box> enemy=(turn)?black:white;
+			Box deletedBox=enemy.get(getIndex(mossa.getRingDelete(), mossa.getPosDelete()));
+			deletedBox.setFree();
+			enemy.remove(getIndex(mossa.getRingDelete(), mossa.getPosDelete()));
+			free.put(getIndex(mossa.getRingDelete(), mossa.getPosDelete()), deletedBox);
 		}
+		/*System.out.println("----------------------------------------------");
+		System.out.println(boxes.keySet().size()+" "+white.keySet().size()+" "+black.keySet().size()+" "+free.keySet().size());
+		for(Integer x:boxes.keySet()){
+			System.out.println(x+" |||| "+boxes.get(x).isWhite() +" " +boxes.get(x).isBlack());
+		}
+		System.out.println("Free:");
+		for(Integer x:free.keySet()){
+			System.out.println(x+" |||| "+free.get(x));
+		}
+		System.out.println("Black:");
+		for(Integer x:black.keySet()){
+			System.out.println(x+" |||| "+black.get(x));
+		}
+		System.out.println("White:");
+		for(Integer x:white.keySet()){
+			System.out.println(x+" |||| "+white.get(x));
+		}
+		System.out.println("---------------------------------------------");*/
 	}
 
 	public color[] serialize(){
 		color[] result=new color[24];
 		for(Box b:free.values()){
-			result[indexOf(b)]=color.empty;
+			if(b!=null)
+				result[indexOf(b)]=color.empty;
 		}
 		for(Box b:white.values()){
-			result[indexOf(b)]=color.white;
+			if(b!=null)
+				result[indexOf(b)]=color.white;
 		}
 		for(Box b:black.values()){
-			result[indexOf(b)]=color.black;
+			if(b!=null)
+				result[indexOf(b)]=color.black;
 		}
 		return result;
 	}
 
 	public void deSerialize(color[] state){
-		free.clear();
-		black.clear();
-		white.clear();
+		clearList();
 		for(int i=0; i<state.length; i++){
 			int index=getIndex(getSerializedRing(i), getSerializedPos(i));
+			Box target=boxes.get(index);
 			switch(state[i]){
 			case black:
-				black.put(index,boxes.get(index));
+				target.setBlack();
+				black.put(index,target);
 				break;
 			case empty:
-				free.put(index, boxes.get(index));
+				target.setFree();
+				free.put(index, target);
 				break;
 			case white:
-				white.put(index,boxes.get(index));
+				target.setWhite();
+				white.put(index,target);
 				break;
 			default:
 				break;
@@ -244,39 +306,61 @@ public class MillsBoard {
 		}
 	}
 
+	private void clearList() {
+		free.clear();
+		white.clear();
+		black.clear();
+		/*for(Integer x:boxes.keySet()){
+			if(free.containsKey(x))
+				free.remove(x);
+			else if(black.containsKey(x))
+				black.remove(x);
+			else if(white.containsKey(x))
+				white.remove(x);
+		}*/
+		
+		
+	}
+
 	public void deSerialize(color[] state, MillsAction mossa, boolean turn){
 		deSerialize(state);
 	}
 	private int indexOf(Box b){
-		return 7*b.getRing()+b.getPos();
+		return 8*b.getRing()+b.getPos();
 	}
 
 	private int getSerializedRing(int i){
-		return i/7;
+		return i/8;
 	}
 
 	private int getSerializedPos(int i){
-		return i%7;
+		return i%8;
 	}
 
 	public enum color{
 		empty,white,black;
 	}
 
-
 	public boolean isTerminal(boolean turn, int piecesToPlace) {
 		Map<Integer,Box> mine=(turn)?white:black;
-		return mine.size()<3 || 
-				getAvailableMoves(turn, piecesToPlace, true).size()==0;
+		return piecesToPlace<=0 && (mine.size()<3 || 
+				getAvailableMoves(turn, piecesToPlace, true).size()==0);
 	}
 
 	public double getFinalValue(boolean turn) {
-		return (turn)?-1000:1000;		
+		return (turn)?-1000:1000;
 	}
 	
 	public double getCutValue(boolean turn){
-		return 0;
-		//TODO euristica;
+		double result = 0;
+		int trisCons=5;
+		int availableCons = 3;
+		int pedineCons = 10;
+		int pedineMie=getWhite();
+		int pedineSue=getBlack();
+		result+=availableCons*getWhiteAvailableMoves()+pedineCons*pedineMie+trisCons*getWhiteNumberOfTris();
+		result-=availableCons*getBlackAvailableMoves()+pedineCons*pedineSue+trisCons*getBlackNumberOfTris();
+		return result;
 	}
 
 }

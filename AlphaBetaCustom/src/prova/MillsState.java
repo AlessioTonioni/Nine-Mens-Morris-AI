@@ -52,11 +52,10 @@ public class MillsState implements IState {
 	public double getCutValue() {
 		return board.getCutValue(turn);
 	}
-	
 
 	@Override
 	public void setValue(double value) {
-		//TODO
+		//TODO ????
 	}
 
 	@Override
@@ -90,7 +89,8 @@ public class MillsState implements IState {
 	
 	@Override
 	public void applyAction() {
-		board.applyAction(action, turn);
+		board.applyAction(action, !turn);
+		currentState=board.serialize();
 	}
 
 

@@ -1,14 +1,10 @@
 package search;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-
-import prova.MillsBoard;
 import prova.MillsState;
 
 public class AlphaBetaSearch {
 	private int maxDepth;
+	private int espansi=0;
 
 	public IAction getNextMove(Node root, int maxDepth) {
 		this.maxDepth=maxDepth;
@@ -28,6 +24,8 @@ public class AlphaBetaSearch {
 	}
 
 	public double maxValue(Node currentNode, double alpha, double beta) {
+		espansi++;
+		System.out.println(espansi);
 		if (currentNode.getState().isTerminal() ){
 			return currentNode.getState().getFinalValue();
 		}
@@ -49,6 +47,8 @@ public class AlphaBetaSearch {
 	}
 
 	public double minValue(Node currentNode, double alpha, double beta) {
+		espansi++;
+		System.out.println(espansi);
 		if (currentNode.getState().isTerminal() ){
 			return currentNode.getState().getFinalValue();
 		}
@@ -74,7 +74,11 @@ public class AlphaBetaSearch {
 		Node n = new Node(state);
 		AlphaBetaSearch search = new AlphaBetaSearch();
 		
-		IAction action = search.getNextMove(n, 2);
+		/*MillsBoard tavola=MillsBoard.getInstance();
+		for(Integer x:tavola.boxes.keySet()){
+			System.out.println(x+" "+tavola.boxes.get(x));
+		}*/
+		IAction action = search.getNextMove(n, 8);
 		System.out.println("Action: "+action);
 		/*
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
