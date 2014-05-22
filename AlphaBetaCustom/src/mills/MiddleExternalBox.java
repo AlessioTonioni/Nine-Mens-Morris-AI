@@ -27,7 +27,7 @@ public class MiddleExternalBox extends Box {
 		if(left.isFree())
 			availableMoves.add(new MillsAction(this.ring, this.pos, left.ring, left.pos, -1, -1));
 		if(right.isFree())
-			availableMoves.add(new MillsAction(this.ring, this.pos, left.ring, left.pos, -1, -1));
+			availableMoves.add(new MillsAction(this.ring, this.pos, right.ring, right.pos, -1, -1));
 		if(down.isFree())
 			availableMoves.add(new MillsAction(this.ring, this.pos, down.ring, down.pos, -1, -1));
 	}
@@ -90,11 +90,12 @@ public class MiddleExternalBox extends Box {
 
 	@Override
 	protected void updateReferences() {
+		reset();
 		down.reset();
 		down.down().reset();
 		left.reset();
 		right.reset();
-		
+		resetMoves();
 		left.resetMoves();
 		right.resetMoves();
 		down.resetMoves();

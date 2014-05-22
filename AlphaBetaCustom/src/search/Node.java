@@ -31,7 +31,7 @@ public class Node {
 	 */
 	public Node(IState state, Node father, int depth ){
 		sons=new ArrayList<Node>();
-		//this.father=father;
+		this.father=father;
 		this.depth=depth;
 		this.state=state;
 	}
@@ -45,21 +45,21 @@ public class Node {
 	}
 
 	public List<Node> getSons() {
-		/*if(sons.size()==0){
+		if(sons.size()==0){
 			List<IState> newStates=state.getAvailableMoves();
 			for(IState s:newStates){
 				Node son=new Node(s,this,depth+1);
 				sons.add(son);
 			}
 		}
-		return sons;*/
-		List<Node> sons=new ArrayList<Node>();
+		return sons;
+		/*List<Node> sons=new ArrayList<Node>();
 		List<IState> newStates=state.getAvailableMoves();
 		for(IState s:newStates){
 			Node son=new Node(s,this,depth+1);
 			sons.add(son);
 		}
-		return sons;
+		return sons;*/
 	}
 
 
@@ -81,5 +81,14 @@ public class Node {
 
 	public IAction getGeneratingMove() {
 		return state.getGeneratingMove();
+	}
+	
+	public Node getRightSon(IAction action) {
+		for(Node n: getSons()) {
+			if(n.getGeneratingMove().equals(action)) { 
+				return n;
+			}
+		}
+		return null;
 	}
 }

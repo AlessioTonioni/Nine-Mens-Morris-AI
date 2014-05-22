@@ -301,7 +301,6 @@ public class MillsBoard {
 				break;
 			default:
 				break;
-
 			}
 		}
 	}
@@ -310,16 +309,6 @@ public class MillsBoard {
 		free.clear();
 		white.clear();
 		black.clear();
-		/*for(Integer x:boxes.keySet()){
-			if(free.containsKey(x))
-				free.remove(x);
-			else if(black.containsKey(x))
-				black.remove(x);
-			else if(white.containsKey(x))
-				white.remove(x);
-		}*/
-		
-		
 	}
 
 	public void deSerialize(color[] state, MillsAction mossa, boolean turn){
@@ -343,8 +332,7 @@ public class MillsBoard {
 
 	public boolean isTerminal(boolean turn, int piecesToPlace) {
 		Map<Integer,Box> mine=(turn)?white:black;
-		return piecesToPlace<=0 && (mine.size()<3 || 
-				getAvailableMoves(turn, piecesToPlace, true).size()==0);
+		return piecesToPlace<=0 && (mine.size()<3 || getAvailableMoves(turn, piecesToPlace, true).size()==0);
 	}
 
 	public double getFinalValue(boolean turn) {

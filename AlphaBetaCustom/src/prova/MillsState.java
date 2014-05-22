@@ -87,6 +87,11 @@ public class MillsState implements IState {
 		board.deSerialize(currentState);
 	}
 	
+	public void setState(color[] state) {
+		currentState = state;
+		restoreState();
+	}
+	
 	@Override
 	public void applyAction() {
 		board.applyAction(action, !turn);

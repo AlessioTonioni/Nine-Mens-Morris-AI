@@ -1,19 +1,26 @@
 package search;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+import mills.MillsAction;
+import prova.MillsBoard.color;
 import prova.MillsState;
 
 public class AlphaBetaSearch {
 	private int maxDepth;
-	private int espansi=0;
 
 	public IAction getNextMove(Node root, int maxDepth) {
 		this.maxDepth=maxDepth;
 		IAction result = null;
 		
 		double resultValue = Double.NEGATIVE_INFINITY;
+		root.getState().restoreState();
+		
 		for (Node son : root.getSons()) {
 			son.getState().applyAction();
-			double value = minValue(son,Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+			double value = minValue(son,Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1);
 			if (value > resultValue) {
 				result = son.getGeneratingMove();
 				resultValue = value;
@@ -23,19 +30,17 @@ public class AlphaBetaSearch {
 		return result;
 	}
 
-	public double maxValue(Node currentNode, double alpha, double beta) {
-		espansi++;
-		System.out.println(espansi);
+	public double maxValue(Node currentNode, double alpha, double beta, int depth) {
 		if (currentNode.getState().isTerminal() ){
 			return currentNode.getState().getFinalValue();
 		}
-		if( currentNode.getDepth() == maxDepth){
+		if( depth == maxDepth){
 			return currentNode.getState().getCutValue();
 		}
 		double value = Double.NEGATIVE_INFINITY;
 		for (Node son : currentNode.getSons()) {
 			son.getState().applyAction();
-			value = Math.max(value, minValue( son, alpha, beta));
+			value = Math.max(value, minValue( son, alpha, beta, depth+1));
 			if (value >= beta){
 				currentNode.getState().setValue(value);
 				return value;
@@ -46,19 +51,17 @@ public class AlphaBetaSearch {
 		return value;
 	}
 
-	public double minValue(Node currentNode, double alpha, double beta) {
-		espansi++;
-		System.out.println(espansi);
+	public double minValue(Node currentNode, double alpha, double beta, int depth) {
 		if (currentNode.getState().isTerminal() ){
 			return currentNode.getState().getFinalValue();
 		}
-		if( currentNode.getDepth() == maxDepth){
+		if( depth == maxDepth){
 			return currentNode.getState().getCutValue();
 		}
 		double value = Double.POSITIVE_INFINITY;
 		for (Node son : currentNode.getSons()) {
 			son.getState().applyAction();
-			value = Math.min(value, maxValue( son, alpha, beta));
+			value = Math.min(value, maxValue( son, alpha, beta, depth+1));
 			if (value <= alpha){
 				currentNode.getState().setValue(value);
 				return value;
@@ -70,20 +73,20 @@ public class AlphaBetaSearch {
 	}
 	
 	public static void main(String[] args) {
-		MillsState state = new MillsState(true, 18);
-		Node n = new Node(state);
+		//MillsState state = new MillsState(true, 18);
+		//Node root = new Node(state);
+		color[] c = new color[]{color.white, color.white, color.black, color.white, color.white, color.black, color.empty, color.black, color.white, color.white, color.black, color.black, color.black, color.black, color.empty, color.black, color.empty, color.black, color.empty, color.empty, color.empty, color.empty, color.empty, color.white};
 		AlphaBetaSearch search = new AlphaBetaSearch();
-		
-		/*MillsBoard tavola=MillsBoard.getInstance();
-		for(Integer x:tavola.boxes.keySet()){
-			System.out.println(x+" "+tavola.boxes.get(x));
-		}*/
-		IAction action = search.getNextMove(n, 8);
+		MillsState s = new MillsState(true, 0);
+		s.setState(c);
+		Node root = new Node(s);
+		IAction action = search.getNextMove(root, 5);
 		System.out.println("Action: "+action);
-		/*
+		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		
-		MillsState previousState = null;
+		Node newNode = root;
+		
 		do{
 			System.out.println("Inserisci prossima mossa: ");
 			try {
@@ -96,17 +99,16 @@ public class AlphaBetaSearch {
 				int ringDelete = Integer.parseInt(st.nextToken());
 				int posDelete = Integer.parseInt(st.nextToken());
 				MillsAction posring = new MillsAction(ringFrom, posFrom, ringTo, posTo, ringDelete, posDelete);
-				MillsState newState = previousState.performAction(posring);
-				
-				action=search.makeDecision(newState);
+				newNode = newNode.getRightSon(action).getRightSon(posring);
+				newNode.setFather(null);
+				action=search.getNextMove(newNode, 5);
 				System.out.println(action);
-				previousState=gioco.getResult(newState, action);
-				previousState.reset(8);
 				
 			} catch (Exception e) {
-				System.out.println("Non ho capito.");
+				e.printStackTrace();
 				continue;
 			}
-		} while(!previousState.isTerminal());*/
+		} while(!newNode.getState().isTerminal());
+		System.out.println("Nodo terminale.");
 	}
 }

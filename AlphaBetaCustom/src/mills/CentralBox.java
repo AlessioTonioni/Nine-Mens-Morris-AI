@@ -28,7 +28,7 @@ public class CentralBox extends Box {
 		if(left.isFree())
 			availableMoves.add(new MillsAction(this.ring, this.pos, left.ring, left.pos, -1, -1));
 		if(right.isFree())
-			availableMoves.add(new MillsAction(this.ring, this.pos, left.ring, left.pos, -1, -1));
+			availableMoves.add(new MillsAction(this.ring, this.pos, right.ring, right.pos, -1, -1));
 		if(up.isFree())
 			availableMoves.add(new MillsAction(this.ring, this.pos, up.ring, up.pos, -1, -1));
 		if(down.isFree())
@@ -94,11 +94,12 @@ public class CentralBox extends Box {
 
 	@Override
 	protected void updateReferences() {
+		reset();
 		left.reset();
 		right.reset();
 		up.reset();
 		down.reset();
-		
+		resetMoves();
 		left.resetMoves();
 		right.resetMoves();
 		up.resetMoves();

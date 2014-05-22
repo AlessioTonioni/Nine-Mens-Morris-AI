@@ -27,7 +27,7 @@ public class CornerBox extends Box {
 		if(left.isFree())
 			availableMoves.add(new MillsAction(this.ring, this.pos, left.ring, left.pos, -1, -1));
 		if(right.isFree())
-			availableMoves.add(new MillsAction(this.ring, this.pos, left.ring, left.pos, -1, -1));	
+			availableMoves.add(new MillsAction(this.ring, this.pos, right.ring, right.pos, -1, -1));	
 	}
 
 	@Override
@@ -87,11 +87,12 @@ public class CornerBox extends Box {
 
 	@Override
 	protected void updateReferences() {
+		reset();
 		left.reset();
 		left.left().reset();
 		right.reset();
 		right.right().reset();
-		
+		resetMoves();
 		left.resetMoves();
 		right.resetMoves();
 	}
