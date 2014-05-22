@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import mills.MillsAction;
 import prova.MillsBoard;
 import prova.MillsState;
+import prova.MillsBoard.color;
 
 public class AlphaBetaSearch {
 	private int maxDepth;
@@ -74,9 +75,13 @@ public class AlphaBetaSearch {
 	
 	public static void main(String[] args) {
 		MillsState state = new MillsState(true, 18);
+		color[] difesa={color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
+						color.empty,color.black,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
+						color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty};
+		state.setState(difesa);
 		Node root = new Node(state);
 		AlphaBetaSearch search = new AlphaBetaSearch();
-		IAction action = search.getNextMove(root, 2);
+		IAction action = search.getNextMove(root, 5);
 		System.out.println("Action: "+action);
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));

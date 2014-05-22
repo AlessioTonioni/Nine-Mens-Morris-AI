@@ -2,10 +2,7 @@ package gioco;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class MillsState implements Cloneable{
 	private static final int ROW=3;
@@ -58,11 +55,11 @@ public class MillsState implements Cloneable{
 	}
 
 	public List<MillsAction> getNextMoves() {
-		if(isFaseUno())
+		if(isPhaseOne())
 			return getNextMovesFirst();
 		else if((pedineMin>3 && turno==-1) || (pedineMax>3 && turno==1))
 			return GetNextMovesSecond();
-		else 
+		else
 			return GetNextMovesThird();
 	}
 
@@ -252,11 +249,11 @@ public class MillsState implements Cloneable{
 	}
 
 	public double getUtility(){
-		if(pedineMin<3 && isFaseDue()) {
+		if(pedineMin<3 && isPhaseTwo()) {
 			return 1000;
-		} else if(pedineMax<3 && isFaseDue()) {
+		} else if(pedineMax<3 && isPhaseTwo()) {
 			return -1000;
-		} else if(isPatta()){
+		} else if(isPair()){
 			return 0;
 		}
 		
@@ -290,14 +287,14 @@ public class MillsState implements Cloneable{
 	}
 
 	public boolean isTerminal() {
-		boolean a = (n<=0 || (pedineMin<3 && isFaseDue()) || (pedineMax<3 && isFaseDue()) || isPatta() 
+		boolean a = (n<=0 || (pedineMin<3 && isPhaseTwo()) || (pedineMax<3 && isPhaseTwo()) || isPair() 
 				//|| (availableMoves(-turno) == 0 && pedineDisponibili<0) || (availableMoves(turno) == 0 && pedineDisponibili<0)
 				);
 		return a;
 	}
 
-	private boolean isPatta() {
-		if(isFaseUno()){
+	private boolean isPair() {
+		if(isPhaseOne()){
 			return false;
 		}
 		boolean result= prevMoves.get(0).equals(prevMoves.get(4)) && prevMoves.get(0).equals(prevMoves.get(8));
@@ -328,16 +325,12 @@ public class MillsState implements Cloneable{
 		return result;
 	}
 
-	private boolean isFaseDue(){
+	private boolean isPhaseTwo(){
 		return pedineDisponibili<=0;
 	}
 	
-	private boolean isFaseUno(){
+	private boolean isPhaseOne(){
 		return pedineDisponibili>0;
-	}
-	
-	private boolean isFaseTre(){
-		return (pedineDisponibili<=0 && pedineMax<3 || pedineDisponibili<=0 && pedineMin<3);
 	}
 	
 	@Override
