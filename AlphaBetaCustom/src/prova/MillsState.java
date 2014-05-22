@@ -50,7 +50,7 @@ public class MillsState implements IState {
 	
 	@Override
 	public double getCutValue() {
-		return board.getCutValue(turn);
+		return board.getCutValue(piecesToPlace);
 	}
 
 	@Override
@@ -63,6 +63,11 @@ public class MillsState implements IState {
 		return board.isTerminal(turn,piecesToPlace);
 	}
 
+	@Override
+	public int getPiecesToPlace(){
+		return piecesToPlace;
+	}
+	
 	@Override
 	public List<IState> getAvailableMoves() {
 		List<IState> result=new ArrayList<IState>();

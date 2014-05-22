@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import mills.MillsAction;
-import prova.MillsBoard.color;
+import prova.MillsBoard;
 import prova.MillsState;
 
 public class AlphaBetaSearch {
@@ -73,14 +73,10 @@ public class AlphaBetaSearch {
 	}
 	
 	public static void main(String[] args) {
-		//MillsState state = new MillsState(true, 18);
-		//Node root = new Node(state);
-		color[] c = new color[]{color.white, color.white, color.black, color.white, color.white, color.black, color.empty, color.black, color.white, color.white, color.black, color.black, color.black, color.black, color.empty, color.black, color.empty, color.black, color.empty, color.empty, color.empty, color.empty, color.empty, color.white};
+		MillsState state = new MillsState(true, 18);
+		Node root = new Node(state);
 		AlphaBetaSearch search = new AlphaBetaSearch();
-		MillsState s = new MillsState(true, 0);
-		s.setState(c);
-		Node root = new Node(s);
-		IAction action = search.getNextMove(root, 5);
+		IAction action = search.getNextMove(root, 7);
 		System.out.println("Action: "+action);
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -99,9 +95,18 @@ public class AlphaBetaSearch {
 				int ringDelete = Integer.parseInt(st.nextToken());
 				int posDelete = Integer.parseInt(st.nextToken());
 				MillsAction posring = new MillsAction(ringFrom, posFrom, ringTo, posTo, ringDelete, posDelete);
-				newNode = newNode.getRightSon(action).getRightSon(posring);
-				newNode.setFather(null);
-				action=search.getNextMove(newNode, 5);
+				
+				newNode.getState().restoreState();
+				MillsBoard.getInstance().applyAction((MillsAction)action, true);
+				MillsBoard.getInstance().applyAction(posring,false);
+				
+				MillsState s=new MillsState(true, newNode.getState().getPiecesToPlace()-2);
+				s.setState(MillsBoard.getInstance().serialize());
+				newNode=new Node(s);
+				
+				//newNode = newNode.getRightSon(action).getRightSon(posring);
+				//newNode.setFather(null);
+				action=search.getNextMove(newNode, 7);
 				System.out.println(action);
 				
 			} catch (Exception e) {

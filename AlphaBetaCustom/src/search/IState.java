@@ -14,4 +14,5 @@ public interface IState {
 	IAction getGeneratingMove();
 	void restoreState();
 	void applyAction();
+	int getPiecesToPlace();
 }

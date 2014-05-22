@@ -85,6 +85,14 @@ public class MillsBoard {
 		}
 		return (sum/3)+((sum%3==0)?0:1);
 	}
+	
+	private boolean isWhitePhaseThree(int piecesToPlace) {
+		return piecesToPlace < 0 && white.size() <= 3;
+	}
+	
+	private boolean isBlackPhaseThree(int piecesToPlace) {
+		return piecesToPlace < 0 && black.size() <= 3;
+	}
 
 	public List<MillsAction> getAvailableMoves(boolean turn, int piecesToPlace, boolean noDelete) {
 		if(piecesToPlace > 0) {
@@ -100,7 +108,7 @@ public class MillsBoard {
 		List<MillsAction> result = new ArrayList<MillsAction>();
 		for(Box b: free.values()) {
 			MillsAction action = new MillsAction(-1, -1, b.getRing(), b.getPos(), -1, -1);
-			applyAndCheck(action, turn, result);
+			applyAndCheck(action, turn, result, false);
 		}
 		return result;
 	}
@@ -132,7 +140,7 @@ public class MillsBoard {
 		}
 	}
 
-	private void applyAndCheck(MillsAction action, boolean turn, List<MillsAction> totalActions) {
+	private void applyAndCheck(MillsAction action, boolean turn, List<MillsAction> totalActions, boolean phaseThree) {
 		Box newBox = null;
 		if(turn) {
 			newBox = move(action, white, free, turn);
@@ -140,7 +148,7 @@ public class MillsBoard {
 			newBox = move(action, black, free, turn);
 		}
 		if(newBox.isOnTris()) {
-			List<MillsAction> millsAction = generateDelete(action, turn);
+			List<MillsAction> millsAction = generateDelete(action, turn, phaseThree);
 			totalActions.addAll(millsAction);
 		} else {
 			totalActions.add(action);
@@ -149,24 +157,25 @@ public class MillsBoard {
 		return;
 	}
 
-	private MillsAction generate(Box b, MillsAction action) {
-		MillsAction newAction = action.clone();
-		if(!b.isOnTris()) {
-			newAction.setRingDelete(b.getRing());
-			newAction.setPosDelete(b.getPos());
-		}
-		return newAction;
-	}
-
-	private List<MillsAction> generateDelete(MillsAction action, boolean turn) {
+	private List<MillsAction> generateDelete(MillsAction action, boolean turn, boolean phaseThree) {
 		List<MillsAction> result = new ArrayList<MillsAction>();
 		if(turn) {
 			for(Box b: black.values()) {
-				result.add(generate(b, action));
+				if(!b.isOnTris() || phaseThree) {
+					MillsAction newAction = action.clone();
+					newAction.setRingDelete(b.getRing());
+					newAction.setPosDelete(b.getPos());
+					result.add(newAction);
+				}
 			}
 		} else {
 			for(Box b: white.values()) {
-				result.add(generate(b, action));
+				if(!b.isOnTris() || phaseThree) {
+					MillsAction newAction = action.clone();
+					newAction.setRingDelete(b.getRing());
+					newAction.setPosDelete(b.getPos());
+					result.add(newAction);
+				}
 			}
 		}
 		return result;
@@ -178,8 +187,10 @@ public class MillsBoard {
 			List<MillsAction> temp = currentBox.getPossibleMovements();
 			if(!noDelete){
 				for(MillsAction action: temp) {
-					applyAndCheck(action, turn, result);
+					applyAndCheck(action, turn, result, false);
 				}
+			} else {
+				result.addAll(temp);
 			}
 		}
 		return result;
@@ -198,7 +209,7 @@ public class MillsBoard {
 		for(Box start: choice.values()) {
 			for(Box b: free.values()) {
 				MillsAction action = new MillsAction(start.getRing(), start.getPos(), b.getRing(), b.getPos(), -1, -1);
-				applyAndCheck(action, turn, result);
+				applyAndCheck(action, turn, result, true);
 			}
 		}
 		return result;
@@ -311,9 +322,6 @@ public class MillsBoard {
 		black.clear();
 	}
 
-	public void deSerialize(color[] state, MillsAction mossa, boolean turn){
-		deSerialize(state);
-	}
 	private int indexOf(Box b){
 		return 8*b.getRing()+b.getPos();
 	}
@@ -339,15 +347,19 @@ public class MillsBoard {
 		return (turn)?-1000:1000;
 	}
 	
-	public double getCutValue(boolean turn){
+	public double getCutValue(int piecesToPlace){
 		double result = 0;
-		int trisCons=5;
+		int trisCons = 8;
 		int availableCons = 3;
-		int pedineCons = 10;
+		int pedineCons = 8;
 		int pedineMie=getWhite();
 		int pedineSue=getBlack();
-		result+=availableCons*getWhiteAvailableMoves()+pedineCons*pedineMie+trisCons*getWhiteNumberOfTris();
-		result-=availableCons*getBlackAvailableMoves()+pedineCons*pedineSue+trisCons*getBlackNumberOfTris();
+		
+		int whiteAvailableMoves = isWhitePhaseThree(piecesToPlace)?0:availableCons*getWhiteAvailableMoves();
+		int blackAvailableMoves = isBlackPhaseThree(piecesToPlace)?0:availableCons*getBlackAvailableMoves();
+		
+		result+=whiteAvailableMoves+pedineCons*pedineMie+trisCons*getWhiteNumberOfTris();
+		result-=blackAvailableMoves+pedineCons*pedineSue+trisCons*getBlackNumberOfTris();
 		return result;
 	}
 
