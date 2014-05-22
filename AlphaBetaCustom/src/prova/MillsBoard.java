@@ -255,24 +255,6 @@ public class MillsBoard {
 			enemy.remove(getIndex(mossa.getRingDelete(), mossa.getPosDelete()));
 			free.put(getIndex(mossa.getRingDelete(), mossa.getPosDelete()), deletedBox);
 		}
-		/*System.out.println("----------------------------------------------");
-		System.out.println(boxes.keySet().size()+" "+white.keySet().size()+" "+black.keySet().size()+" "+free.keySet().size());
-		for(Integer x:boxes.keySet()){
-			System.out.println(x+" |||| "+boxes.get(x).isWhite() +" " +boxes.get(x).isBlack());
-		}
-		System.out.println("Free:");
-		for(Integer x:free.keySet()){
-			System.out.println(x+" |||| "+free.get(x));
-		}
-		System.out.println("Black:");
-		for(Integer x:black.keySet()){
-			System.out.println(x+" |||| "+black.get(x));
-		}
-		System.out.println("White:");
-		for(Integer x:white.keySet()){
-			System.out.println(x+" |||| "+white.get(x));
-		}
-		System.out.println("---------------------------------------------");*/
 	}
 
 	public color[] serialize(){

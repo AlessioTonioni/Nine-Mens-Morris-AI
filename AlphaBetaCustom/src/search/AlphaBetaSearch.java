@@ -32,7 +32,7 @@ public class AlphaBetaSearch {
 
 	public double maxValue(Node currentNode, double alpha, double beta, int depth) {
 		if (currentNode.getState().isTerminal() ){
-			return currentNode.getState().getFinalValue();
+			return currentNode.getState().getFinalValue()+depth;
 		}
 		if( depth == maxDepth){
 			return currentNode.getState().getCutValue();
@@ -53,7 +53,7 @@ public class AlphaBetaSearch {
 
 	public double minValue(Node currentNode, double alpha, double beta, int depth) {
 		if (currentNode.getState().isTerminal() ){
-			return currentNode.getState().getFinalValue();
+			return currentNode.getState().getFinalValue()-depth;
 		}
 		if( depth == maxDepth){
 			return currentNode.getState().getCutValue();
@@ -76,7 +76,7 @@ public class AlphaBetaSearch {
 		MillsState state = new MillsState(true, 18);
 		Node root = new Node(state);
 		AlphaBetaSearch search = new AlphaBetaSearch();
-		IAction action = search.getNextMove(root, 7);
+		IAction action = search.getNextMove(root, 2);
 		System.out.println("Action: "+action);
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
