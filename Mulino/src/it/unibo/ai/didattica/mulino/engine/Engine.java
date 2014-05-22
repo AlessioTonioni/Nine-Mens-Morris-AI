@@ -5,6 +5,7 @@ import java.io.IOException;
 import it.unibo.ai.didattica.mulino.actions.Action;
 import it.unibo.ai.didattica.mulino.actions.Phase1;
 import it.unibo.ai.didattica.mulino.domain.State;
+import it.unibo.ai.didattica.mulino.gui.GUI;
 
 public class Engine {
 
@@ -17,10 +18,17 @@ public class Engine {
 	private TCPMulino blackSocket;
 	
 	
+	private GUI theGui;
+	
+	
+	
 	public Engine() {
 		currentState = new State();
+		//currentState.getBoard().put("g1", State.Checker.WHITE);
 		currentPlayer = State.Checker.WHITE;
 		delay = 60;
+		theGui = new GUI();
+		theGui.update(currentState);
 	}
 	
 	
@@ -75,6 +83,7 @@ public class Engine {
 				whiteSocket.writeState(currentState);
 				blackSocket.writeState(currentState);
 				System.out.println(currentState.toString());
+				theGui.update(currentState);
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.exit(1);
