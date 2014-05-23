@@ -1,15 +1,18 @@
-package search;
+package node;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
-	private Node father;
-	private List<Node> sons;
+import search.IAction;
+import search.IState;
 
-	private int depth;
+public abstract class Node {
+	protected Node father;
+	protected List<Node> sons;
 
-	private IState state;
+	protected int depth;
+
+	protected IState state;
 
 
 	/**
@@ -31,7 +34,7 @@ public class Node {
 	 */
 	public Node(IState state, Node father, int depth ){
 		sons=new ArrayList<Node>();
-		//this.father=father;
+		this.father=father;
 		this.depth=depth;
 		this.state=state;
 	}
@@ -44,23 +47,7 @@ public class Node {
 		this.father = father;
 	}
 
-	public List<Node> getSons() {
-		/*if(sons.size()==0){
-			List<IState> newStates=state.getAvailableMoves();
-			for(IState s:newStates){
-				Node son=new Node(s,this,depth+1);
-				sons.add(son);
-			}
-		}
-		return sons;*/
-		List<Node> sons=new ArrayList<Node>();
-		List<IState> newStates=state.getAvailableMoves();
-		for(IState s:newStates){
-			Node son=new Node(s,this,depth+1);
-			sons.add(son);
-		}
-		return sons;
-	}
+	public abstract List<Node> getSons();
 
 
 	public int getDepth() {

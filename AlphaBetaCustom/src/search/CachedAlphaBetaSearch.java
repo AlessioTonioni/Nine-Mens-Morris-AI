@@ -1,15 +1,21 @@
 package search;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import node.Node;
 
-
-public class AlphaBetaSearch {
+public class CachedAlphaBetaSearch {
 	private int maxDepth;
+	private Map<IState,Double> alreadyExpanded=new HashMap<IState,Double>();
+	private int hit=0;
 	private int expanded=0;
 	
 	public IAction getNextMove(Node root, int maxDepth) {
 		this.maxDepth=maxDepth;
+		alreadyExpanded.clear();
 		IAction result = null;
+		hit=0;
 		expanded=0;
 		
 		double resultValue = Double.NEGATIVE_INFINITY;
@@ -25,16 +31,25 @@ public class AlphaBetaSearch {
 			root.getState().restoreState();
 		}
 		System.out.println("Nodi espansi: "+ expanded);
+		System.out.println("Hit in cache: "+hit);
 		return result;
 	}
 
 	public double maxValue(Node currentNode, double alpha, double beta, int depth) {
 		expanded++;
 		if (currentNode.getState().isTerminal() ){
-			return currentNode.getState().getFinalValue()+depth;
+			double value=currentNode.getState().getFinalValue();
+			alreadyExpanded.put(currentNode.getState(), value);
+			return value+depth;
+		}
+		if(alreadyExpanded.containsKey(currentNode.getState())){
+			hit++;
+			return alreadyExpanded.get(currentNode.getState());
 		}
 		if( depth == maxDepth){
-			return currentNode.getState().getCutValue();
+			double value=currentNode.getState().getCutValue();
+			alreadyExpanded.put(currentNode.getState(), value);
+			return value;
 		}
 		double value = Double.NEGATIVE_INFINITY;
 		for (Node son : currentNode.getSons()) {
@@ -42,21 +57,32 @@ public class AlphaBetaSearch {
 			value = Math.max(value, minValue( son, alpha, beta, depth+1));
 			if (value >= beta){
 				currentNode.getState().setValue(value);
+				//Scommentando questa riga va molto più veloce, ma rincretinisce, cosa c'è di sbagliato?
+				//alreadyExpanded.put(currentNode.getState(), value);  
 				return value;
 			}
 			currentNode.getState().restoreState();
 			alpha = Math.max(alpha, value);
 		}
+		alreadyExpanded.put(currentNode.getState(), value);
 		return value;
 	}
 
 	public double minValue(Node currentNode, double alpha, double beta, int depth) {
 		expanded++;
 		if (currentNode.getState().isTerminal() ){
-			return currentNode.getState().getFinalValue()-depth;
+			double value=currentNode.getState().getFinalValue();
+			alreadyExpanded.put(currentNode.getState(), value);
+			return value-depth;
+		}
+		if(alreadyExpanded.containsKey(currentNode.getState())){
+			hit++;
+			return alreadyExpanded.get(currentNode.getState());
 		}
 		if( depth == maxDepth){
-			return currentNode.getState().getCutValue();
+			double value=currentNode.getState().getCutValue();
+			alreadyExpanded.put(currentNode.getState(), value);
+			return value;
 		}
 		double value = Double.POSITIVE_INFINITY;
 		for (Node son : currentNode.getSons()) {
@@ -64,13 +90,15 @@ public class AlphaBetaSearch {
 			value = Math.min(value, maxValue( son, alpha, beta, depth+1));
 			if (value <= alpha){
 				currentNode.getState().setValue(value);
+				//Scommentando questa riga va molto più veloce, ma rincretinisce, cosa c'è di sbagliato?
+				//alreadyExpanded.put(currentNode.getState(), value);
 				return value;
 			}
 			currentNode.getState().restoreState();
 			beta = Math.min(beta, value);
 		}
+		alreadyExpanded.put(currentNode.getState(), value);
 		return value;
 	}
-	
 	
 }

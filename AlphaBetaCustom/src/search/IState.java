@@ -15,4 +15,5 @@ public interface IState {
 	void restoreState();
 	void applyAction();
 	int getPiecesToPlace();
+	
 }

@@ -1,6 +1,7 @@
 package prova;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import prova.MillsBoard.color;
@@ -102,6 +103,36 @@ public class MillsState implements IState {
 		board.applyAction(action, !turn);
 		currentState=board.serialize();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(currentState);
+		result = prime * result + piecesToPlace;
+		result = prime * result + (turn ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MillsState other = (MillsState) obj;
+		if (!Arrays.equals(currentState, other.currentState))
+			return false;
+		if (piecesToPlace != other.piecesToPlace)
+			return false;
+		if (turn != other.turn)
+			return false;
+		return true;
+	}
+
+
 
 
 }
