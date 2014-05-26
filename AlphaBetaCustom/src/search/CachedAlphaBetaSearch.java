@@ -63,7 +63,7 @@ public class CachedAlphaBetaSearch {
 			if (value >= beta){
 				currentNode.getState().setValue(value);
 				//Scommentando questa riga va molto più veloce, ma rincretinisce, cosa c'è di sbagliato?
-				alreadyExpanded[depth].put(currentNode.getState(), value);
+				//alreadyExpanded[depth].put(currentNode.getState(), value);
 				return value;
 			}
 			currentNode.getState().restoreState();
@@ -96,7 +96,7 @@ public class CachedAlphaBetaSearch {
 			if (value <= alpha){
 				currentNode.getState().setValue(value);
 				//Scommentando questa riga va molto più veloce, ma rincretinisce, cosa c'è di sbagliato?
-				alreadyExpanded[depth].put(currentNode.getState(), value);
+				//alreadyExpanded[depth].put(currentNode.getState(), value);
 				return value;
 			}
 			currentNode.getState().restoreState();

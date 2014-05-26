@@ -33,10 +33,7 @@ public class Main {
 		Node root=createInitialNode(false);
 		//Node root = createInitialNode(false,board);
 		//Node root = createInitialNode(true);
-		root.getState().restoreState();
-		if(root.getState().isTerminal()){
-			System.out.println("bababab");
-		}
+		
 		//CachedAlphaBetaSearch search = new CachedAlphaBetaSearch();
 		//MinMaxSearch search=new MinMaxSearch();
 		//AlphaBetaSearch search=new AlphaBetaSearch();
@@ -100,6 +97,7 @@ public class Main {
 		else
 			return new SimpleNode(initialState);
 	}
+	
 	private static Node getSimpleNode(Node from, List<IAction> mosse){
 		from.getState().restoreState();
 		boolean turno=(from.getState().isMax())?true:false;
