@@ -2,7 +2,7 @@ package search;
 
 import node.Node;
 
-public class AlphaBetaSearch {
+public class MinMaxSearch {
 	private int maxDepth;
 	private int expanded=0;
 
@@ -39,10 +39,10 @@ public class AlphaBetaSearch {
 		for (Node son : currentNode.getSons()) {
 			son.getState().applyAction();
 			value = Math.max(value, minValue( son, alpha, beta, depth+1));
-			if (value >= beta){
+			/*if (value >= beta){
 				currentNode.getState().setValue(value);
 				return value;
-			}
+			}*/
 			currentNode.getState().restoreState();
 			alpha = Math.max(alpha, value);
 		}
@@ -61,14 +61,13 @@ public class AlphaBetaSearch {
 		for (Node son : currentNode.getSons()) {
 			son.getState().applyAction();
 			value = Math.min(value, maxValue( son, alpha, beta, depth+1));
-			if (value <= alpha){
+			/*if (value <= alpha){
 				currentNode.getState().setValue(value);
 				return value;
-			}
+			}*/
 			currentNode.getState().restoreState();
 			beta = Math.min(beta, value);
 		}
 		return value;
 	}
-
 }

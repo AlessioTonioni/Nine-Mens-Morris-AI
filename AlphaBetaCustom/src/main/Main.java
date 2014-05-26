@@ -4,7 +4,6 @@ import graphic.Board;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -14,20 +13,35 @@ import node.Node;
 import node.SimpleNode;
 import node.TreeNode;
 import prova.MillsBoard;
-import prova.MillsState;
 import prova.MillsBoard.color;
+import prova.MillsState;
 import search.AlphaBetaSearch;
 import search.CachedAlphaBetaSearch;
 import search.IAction;
+import search.MinMaxSearch;
+import search.TimeoutAlphaBetaSearch;
 
 public class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		
 		Board grafica=new Board(".");
-		Node root = createInitialNode(false);
+		//grafica.SetMove(-1, -1, 1, 1, -1, -1,"X");
+		//color[]  board={	color.black,color.black,color.empty,color.black,color.white,color.white,color.black,color.black,
+		//					color.white,color.empty,color.empty,color.empty,color.empty,color.black,color.empty,color.empty,
+		//					color.white,color.empty,color.black,color.black,color.empty,color.empty,color.empty,color.white};
+		
+		Node root=createInitialNode(false);
+		//Node root = createInitialNode(false,board);
+		//Node root = createInitialNode(true);
+		root.getState().restoreState();
+		if(root.getState().isTerminal()){
+			System.out.println("bababab");
+		}
 		//CachedAlphaBetaSearch search = new CachedAlphaBetaSearch();
-		AlphaBetaSearch search=new AlphaBetaSearch();
-		MillsAction action =(MillsAction) search.getNextMove(root, 5);
+		//MinMaxSearch search=new MinMaxSearch();
+		//AlphaBetaSearch search=new AlphaBetaSearch();
+		TimeoutAlphaBetaSearch search=new TimeoutAlphaBetaSearch();
+		MillsAction action =(MillsAction) search.getNextMove(root, 30);
 		
 		grafica.SetMove(action.getRingFrom(), action.getPosFrom(), action.getRingTo(), action.getPosTo(), action.getRingDelete(), action.getPosDelete(), "O");
 		System.out.println("Action: "+action);
@@ -54,8 +68,11 @@ public class Main {
 				movesList.add(posring);
 				
 				root=getSimpleNode(root, movesList);
+				//root=getTreeNode(root,movesList);
 				
-				action=(MillsAction) search.getNextMove(root, 7);
+				System.out.println("Inserire profondità: ");
+				line=in.readLine();
+				action=(MillsAction) search.getNextMove(root, Integer.parseInt(line));
 				grafica.SetMove(action.getRingFrom(), action.getPosFrom(), action.getRingTo(), action.getPosTo(), action.getRingDelete(), action.getPosDelete(), "O");
 				System.out.println(action);
 				System.out.println(grafica.toString());
@@ -76,6 +93,13 @@ public class Main {
 			return new SimpleNode(initialState);
 	}
 	
+	private static Node createInitialNode(boolean isTreeEnabled, color[] board){
+		MillsState initialState=new MillsState(true,17,board,null);
+		if(isTreeEnabled)
+			return new TreeNode(initialState);
+		else
+			return new SimpleNode(initialState);
+	}
 	private static Node getSimpleNode(Node from, List<IAction> mosse){
 		from.getState().restoreState();
 		boolean turno=(from.getState().isMax())?true:false;

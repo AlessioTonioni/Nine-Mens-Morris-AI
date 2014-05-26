@@ -76,8 +76,9 @@ public class MillsState implements IState {
 		color[] tempState=board.serialize();
 		
 		List<MillsAction> actions = board.getAvailableMoves(turn, piecesToPlace,false);
+		int newPiecesToPlace = (piecesToPlace>0)?piecesToPlace-1:0;
 		for(MillsAction a:actions){
-			result.add(new MillsState(!turn, piecesToPlace-1, tempState, a));
+			result.add(new MillsState(!turn, newPiecesToPlace, tempState, a));
 		}
 		
 		return result;
