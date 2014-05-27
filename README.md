@@ -22,3 +22,6 @@ Exception in thread "main" java.lang.NullPointerException
 	at prova.MillsBoard.isTerminal(MillsBoard.java:325)
 	at prova.MillsState.isTerminal(MillsState.java:64)
 	at main.Main.main(Main.java:84)
+
+---------------------------------------------------------------------------------------
+Aggiungere che se non c'è una non mulino mangiabile mangio quelle in mulino.
