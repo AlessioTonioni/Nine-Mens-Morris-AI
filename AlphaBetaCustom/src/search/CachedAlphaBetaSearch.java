@@ -48,8 +48,11 @@ public class CachedAlphaBetaSearch {
 			return value+depth;
 		}
 		if(alreadyExpanded[depth].containsKey(currentNode.getState())){
-			hit++;
-			return alreadyExpanded[depth].get(currentNode.getState());
+			Double value=alreadyExpanded[depth].get(currentNode.getState());
+			if(value>=beta || depth==maxDepth){
+				hit++;
+				return value;
+			}
 		}
 		if( depth == maxDepth){
 			double value=currentNode.getState().getCutValue();
@@ -62,8 +65,8 @@ public class CachedAlphaBetaSearch {
 			value = Math.max(value, minValue( son, alpha, beta, depth+1));
 			if (value >= beta){
 				currentNode.getState().setValue(value);
-				//Scommentando questa riga va molto più veloce, ma rincretinisce, cosa c'è di sbagliato?
-				//alreadyExpanded[depth].put(currentNode.getState(), value);
+				//Scommentando questa riga va molto piï¿½ veloce, ma rincretinisce, cosa c'ï¿½ di sbagliato?
+				alreadyExpanded[depth].put(currentNode.getState(), value);
 				return value;
 			}
 			currentNode.getState().restoreState();
@@ -81,8 +84,11 @@ public class CachedAlphaBetaSearch {
 			return value-depth;
 		}
 		if(alreadyExpanded[depth].containsKey(currentNode.getState())){
-			hit++;
-			return alreadyExpanded[depth].get(currentNode.getState());
+			Double value=alreadyExpanded[depth].get(currentNode.getState());
+			if(value <= alpha || depth==maxDepth){
+				hit++;
+				return value;
+			}
 		}
 		if( depth == maxDepth){
 			double value=currentNode.getState().getCutValue();
@@ -95,8 +101,8 @@ public class CachedAlphaBetaSearch {
 			value = Math.min(value, maxValue( son, alpha, beta, depth+1));
 			if (value <= alpha){
 				currentNode.getState().setValue(value);
-				//Scommentando questa riga va molto più veloce, ma rincretinisce, cosa c'è di sbagliato?
-				//alreadyExpanded[depth].put(currentNode.getState(), value);
+				//Scommentando questa riga va molto piï¿½ veloce, ma rincretinisce, cosa c'ï¿½ di sbagliato?
+				alreadyExpanded[depth].put(currentNode.getState(), value);
 				return value;
 			}
 			currentNode.getState().restoreState();
