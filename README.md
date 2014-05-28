@@ -24,4 +24,5 @@ Exception in thread "main" java.lang.NullPointerException
 	at main.Main.main(Main.java:84)
 
 ---------------------------------------------------------------------------------------
-Aggiungere che se non c'è una non mulino mangiabile mangio quelle in mulino.
+- Aggiungere che se non c'è una non mulino mangiabile mangio quelle in mulino.
+- La cache totale non funziona perchè il valore alpha-beta a cui tagliare potrebbe essere diverso => non riespandere solo se il valore salvato è coerente con quello del taglio?
