@@ -25,13 +25,13 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		
 		Board grafica=new Board(".");
-		//grafica.SetMove(-1, -1, 1, 1, -1, -1,"X");
-		/*color[]  board={	color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
-							color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
+		grafica.SetMove(-1, -1, 1, 1, -1, -1,"X");
+		color[]  board={	color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
+							color.empty,color.black,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
 							color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty};
-		*/
-		Node root=createInitialNode(false);
-		//Node root = createInitialNode(false,board);
+		
+		//Node root=createInitialNode(false);
+		Node root = createInitialNode(false,board);
 		//Node root = createInitialNode(true);
 		
 		//CachedAlphaBetaSearch search = new CachedAlphaBetaSearch();

@@ -12,20 +12,26 @@ public class TimeoutAlphaBetaSearch {
 	public IAction getNextMove(Node root, int maxSeconds) throws InterruptedException{
 		this.root=root;
 		this.stop=false;
-		currentMaxDepth=currentMaxDepth-3;
+		currentMaxDepth=currentMaxDepth-2;
 		if(currentMaxDepth<minDepth)
 			currentMaxDepth=minDepth;
 		
 		
 		Thread t1 = new Thread(){
-			private CachedAlphaBetaSearch searchEngine=new CachedAlphaBetaSearch();
+			private CachedAlphaBetaSearchAux searchEngine=new CachedAlphaBetaSearchAux();
 			@Override
 			public void run(){
+				int temp=currentMaxDepth;
+				result=searchEngine.getNextMove(TimeoutAlphaBetaSearch.this.root, minDepth);
+				currentMaxDepth=((currentMaxDepth/2)<minDepth)?minDepth:currentMaxDepth/2;
+				
 				while(!stop)
 				{
-					currentMaxDepth++;
-					result=searchEngine.getNextMove(TimeoutAlphaBetaSearch.this.root, currentMaxDepth);
+					result=searchEngine.getNextMove(TimeoutAlphaBetaSearch.this.root, temp);
+					currentMaxDepth=temp;
 					System.out.println("level "+currentMaxDepth+" done");
+					temp++;
+
 				}					
 			}
 		};
