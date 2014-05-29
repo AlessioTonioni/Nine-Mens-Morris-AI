@@ -26,10 +26,10 @@ public class Main {
 		
 		Board grafica=new Board(".");
 		//grafica.SetMove(-1, -1, 1, 1, -1, -1,"X");
-		//color[]  board={	color.black,color.black,color.empty,color.black,color.white,color.white,color.black,color.black,
-		//					color.white,color.empty,color.empty,color.empty,color.empty,color.black,color.empty,color.empty,
-		//					color.white,color.empty,color.black,color.black,color.empty,color.empty,color.empty,color.white};
-		
+		/*color[]  board={	color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
+							color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
+							color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty};
+		*/
 		Node root=createInitialNode(false);
 		//Node root = createInitialNode(false,board);
 		//Node root = createInitialNode(true);
@@ -38,7 +38,7 @@ public class Main {
 		//MinMaxSearch search=new MinMaxSearch();
 		//AlphaBetaSearch search=new AlphaBetaSearch();
 		TimeoutAlphaBetaSearch search=new TimeoutAlphaBetaSearch();
-		MillsAction action =(MillsAction) search.getNextMove(root, 30);
+		MillsAction action =(MillsAction) search.getNextMove(root, 60);
 		
 		grafica.SetMove(action.getRingFrom(), action.getPosFrom(), action.getRingTo(), action.getPosTo(), action.getRingDelete(), action.getPosDelete(), "O");
 		System.out.println("Action: "+action);
@@ -47,8 +47,9 @@ public class Main {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		
 		do{
-			System.out.println("Inserisci prossima mossa: ");
+			
 			try {
+				System.out.println("Inserisci prossima mossa: ");
 				String line = in.readLine();
 				StringTokenizer st = new StringTokenizer(line);
 				int ringFrom = Integer.parseInt(st.nextToken());
@@ -60,6 +61,8 @@ public class Main {
 				MillsAction posring = new MillsAction(ringFrom, posFrom, ringTo, posTo, ringDelete, posDelete);
 				grafica.SetMove(posring.getRingFrom(), posring.getPosFrom(), posring.getRingTo(), posring.getPosTo(), posring.getRingDelete(), posring.getPosDelete(), "X");
 				System.out.println(grafica.toString());
+				System.out.println("Inserire profondità: ");
+				line=in.readLine();
 				List<IAction> movesList=new ArrayList<IAction>();
 				movesList.add(action);
 				movesList.add(posring);
@@ -67,8 +70,9 @@ public class Main {
 				root=getSimpleNode(root, movesList);
 				//root=getTreeNode(root,movesList);
 				
-				System.out.println("Inserire profondità: ");
-				line=in.readLine();
+				if(root.getState().isTerminal())
+					break;
+				
 				action=(MillsAction) search.getNextMove(root, Integer.parseInt(line));
 				grafica.SetMove(action.getRingFrom(), action.getPosFrom(), action.getRingTo(), action.getPosTo(), action.getRingDelete(), action.getPosDelete(), "O");
 				System.out.println(action);
@@ -78,7 +82,7 @@ public class Main {
 				e.printStackTrace();
 				continue;
 			}
-		} while(!root.getState().isTerminal());
+		} while(true);
 		System.out.println("Nodo terminale.");
 	}
 	

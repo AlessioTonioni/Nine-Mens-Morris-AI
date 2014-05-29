@@ -3,8 +3,8 @@ package search;
 import node.Node;
 
 public class TimeoutAlphaBetaSearch {
-	private final int startDepth=5;
-	private int currentMaxDepth;
+	private final int minDepth=5;
+	private int currentMaxDepth=minDepth;
 	private Node root=null;
 	private boolean stop=false;
 	private IAction result=null;
@@ -12,7 +12,9 @@ public class TimeoutAlphaBetaSearch {
 	public IAction getNextMove(Node root, int maxSeconds) throws InterruptedException{
 		this.root=root;
 		this.stop=false;
-		currentMaxDepth=startDepth;
+		currentMaxDepth=currentMaxDepth-3;
+		if(currentMaxDepth<minDepth)
+			currentMaxDepth=minDepth;
 		
 		
 		Thread t1 = new Thread(){
@@ -24,8 +26,7 @@ public class TimeoutAlphaBetaSearch {
 					currentMaxDepth++;
 					result=searchEngine.getNextMove(TimeoutAlphaBetaSearch.this.root, currentMaxDepth);
 					System.out.println("level "+currentMaxDepth+" done");
-				}
-					
+				}					
 			}
 		};
 		t1.start();
