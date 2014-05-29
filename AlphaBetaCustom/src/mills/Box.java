@@ -83,7 +83,7 @@ public abstract class Box {
 	
 	protected abstract void generatePossibleMovements();	
 	
-	protected boolean isFree(){
+	public boolean isFree(){
 		return !white && !black;
 	}
 	
@@ -109,4 +109,11 @@ public abstract class Box {
 		availableMoves = null;
 	}
 
+	public boolean isMyColor(boolean turn){
+		return turn?isWhite():isBlack();
+	}
+	
+	public abstract int countTL(boolean turn);
+
+	
 }

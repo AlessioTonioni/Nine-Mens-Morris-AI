@@ -105,4 +105,23 @@ public class CentralBox extends Box {
 		up.resetMoves();
 		down.resetMoves();
 	}
+
+	@Override
+	public int countTL(boolean turn) {
+		int res = 0;
+		if (isFree()) {
+			if (up.isMyColor(turn))
+				res++;
+			if (down.isMyColor(turn))
+				res++;
+			if (right.isMyColor(turn))
+				res++;
+			if (left.isMyColor(turn))
+				res++;
+		}
+		if (res >= 3) {
+			return res - 2;
+		}
+		return 0;
+	}
 }

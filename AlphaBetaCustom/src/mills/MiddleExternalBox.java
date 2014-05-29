@@ -101,4 +101,21 @@ public class MiddleExternalBox extends Box {
 		down.resetMoves();
 	}
 
+	@Override
+	public int countTL(boolean turn) {
+		int res = 0;
+		if (isFree()) {
+			if (down.isMyColor(turn))
+				res++;
+			if (right.isMyColor(turn))
+				res++;
+			if (left.isMyColor(turn))
+				res++;
+		}
+		if (res >= 3) {
+			return 1;
+		}
+		return 0;
+	}
+
 }

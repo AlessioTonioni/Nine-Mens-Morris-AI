@@ -62,6 +62,14 @@ public class MillsBoard {
 		return sum;
 	}
 	
+	public int getCountTL(boolean turn) {
+		int sum = 0;
+		for(Box b: free.values()) {
+			sum+=b.countTL(turn);
+		}
+		return sum;
+	}
+	
 	public int getBlackAvailableMoves() {
 		int sum = 0;
 		for(Box b: black.values()) {
@@ -334,14 +342,18 @@ public class MillsBoard {
 		int trisCons = 8;
 		int availableCons = 3;
 		int pedineCons = 8;
+		int countCons = 2;
 		int pedineMie=getWhite();
 		int pedineSue=getBlack();
 		
 		int whiteAvailableMoves = isWhitePhaseThree(piecesToPlace)?0:availableCons*getWhiteAvailableMoves();
 		int blackAvailableMoves = isBlackPhaseThree(piecesToPlace)?0:availableCons*getBlackAvailableMoves();
 		
-		result+=whiteAvailableMoves+pedineCons*pedineMie+trisCons*getWhiteNumberOfTris();
-		result-=blackAvailableMoves+pedineCons*pedineSue+trisCons*getBlackNumberOfTris();
+		int countTLMie = getCountTL(true);
+		int countTLSue = getCountTL(false);
+		
+		result+=whiteAvailableMoves+pedineCons*pedineMie+trisCons*getWhiteNumberOfTris()+countTLMie*countCons;
+		result-=blackAvailableMoves+pedineCons*pedineSue+trisCons*getBlackNumberOfTris()+countTLSue*countCons;
 		return result;
 	}
 

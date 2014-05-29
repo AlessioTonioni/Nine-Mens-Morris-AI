@@ -101,4 +101,21 @@ public class MiddleInternalBox extends Box {
 		up.resetMoves();
 	}
 
+	@Override
+	public int countTL(boolean turn) {
+		int res = 0;
+		if (isFree()) {
+			if (up.isMyColor(turn))
+				res++;
+			if (right.isMyColor(turn))
+				res++;
+			if (left.isMyColor(turn))
+				res++;
+		}
+		if (res >= 3) {
+			return 1;
+		}
+		return 0;
+	}
+
 }
