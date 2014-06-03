@@ -40,7 +40,7 @@ public class CachedAlphaBetaSearchAux {
 		System.out.println(result);
 		
 		if(result == null) {
-			System.out.println("Sono morto");
+			System.out.println("Nessuna mossa disponibile!!!");
 		}
 		
 		return result;

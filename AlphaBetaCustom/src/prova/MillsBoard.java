@@ -95,11 +95,11 @@ public class MillsBoard {
 	}
 	
 	public boolean isWhitePhaseThree(int piecesToPlace) {
-		return piecesToPlace < 0 && white.size() <= 3;
+		return piecesToPlace <= 0 && white.size() <= 3;
 	}
 	
 	public boolean isBlackPhaseThree(int piecesToPlace) {
-		return piecesToPlace < 0 && black.size() <= 3;
+		return piecesToPlace <= 0 && black.size() <= 3;
 	}
 
 	public List<MillsAction> getAvailableMoves(boolean turn, int piecesToPlace, boolean noDelete) {

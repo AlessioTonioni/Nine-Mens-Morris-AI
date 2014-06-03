@@ -12,7 +12,7 @@ public class TimeoutAlphaBetaSearch {
 	public IAction getNextMove(Node root, int maxSeconds) throws InterruptedException{
 		this.root=root;
 		this.stop=false;
-		currentMaxDepth=currentMaxDepth-2;
+		currentMaxDepth=currentMaxDepth-1;
 		if(currentMaxDepth<minDepth)
 			currentMaxDepth=minDepth;
 		
