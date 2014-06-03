@@ -9,10 +9,6 @@ import node.Node;
 public class CachedAlphaBetaSearchAux {
 	private int maxDepth;
 	private Map<IState,StateValue>[] alreadyExpanded;
-	private int hit=0;
-	private int expanded=0;
-	private int continued=0;
-	private int skipped=0;
 	
 	public IAction getNextMove(Node root, int maxDepth) {
 		this.maxDepth=maxDepth;
@@ -22,11 +18,10 @@ public class CachedAlphaBetaSearchAux {
 			alreadyExpanded[i] = new HashMap<IState, StateValue>();
 		}
 		IAction result = null;
-		hit=0;
-		expanded=0;
 		
 		double resultValue = Double.NEGATIVE_INFINITY;
 		root.getState().restoreState();
+		root.getState().setPhase();
 		
 		for (Node son : root.getSons()) {
 			son.getState().applyAction();
@@ -37,19 +32,24 @@ public class CachedAlphaBetaSearchAux {
 			}
 			root.getState().restoreState();
 		}
-		System.out.println("Nodi espansi: "+ expanded);
-		System.out.println("Hit in cache: "+hit);
-		System.out.println("Nodi saltati: "+skipped);
-		System.out.println("Nodi ripresi: "+continued);
+		//System.out.println("Nodi espansi: "+ expanded);
+		//System.out.println("Hit in cache: "+hit);
+		//System.out.println("Nodi saltati: "+skipped);
+		//System.out.println("Nodi ripresi: "+continued);
+		
+		System.out.println(result);
+		
+		if(result == null) {
+			System.out.println("Sono morto");
+		}
+		
 		return result;
 	}
 
 	public double maxValue(Node currentNode, double alpha, double beta, int depth) {
-		expanded++;
 		double value = Double.NEGATIVE_INFINITY;
 		int last = 0;
 		if(alreadyExpanded[depth].containsKey(currentNode.getState())){
-			hit++;
 			StateValue stateValue =  alreadyExpanded[depth].get(currentNode.getState());
 			if(stateValue.isTerminal())
 				return stateValue.getValue() + depth;
@@ -58,10 +58,8 @@ public class CachedAlphaBetaSearchAux {
 			value = stateValue.getValue();
 			if (value >= beta)
 			{
-				skipped++;
 				return value;
 			}
-			continued++;
 			last = stateValue.getLastExpanded() + 1;
 		}
 		else {
@@ -82,7 +80,7 @@ public class CachedAlphaBetaSearchAux {
 			son.getState().applyAction();
 			value = Math.max(value, minValue( son, alpha, beta, depth+1));
 			if (value >= beta){
-				currentNode.getState().setValue(value);
+				//currentNode.getState().setValue(value);
 				alreadyExpanded[depth].put(currentNode.getState(), new StateValue(false, false, value, i));  
 				return value;
 			}
@@ -94,11 +92,9 @@ public class CachedAlphaBetaSearchAux {
 	}
 
 	public double minValue(Node currentNode, double alpha, double beta, int depth) {
-		expanded++;
 		double value = Double.POSITIVE_INFINITY;
 		int last = 0;
 		if(alreadyExpanded[depth].containsKey(currentNode.getState())){
-			hit++;
 			StateValue stateValue =  alreadyExpanded[depth].get(currentNode.getState());
 			if(stateValue.isTerminal())
 				return stateValue.getValue() - depth;
@@ -107,10 +103,8 @@ public class CachedAlphaBetaSearchAux {
 			value = stateValue.getValue();
 			if (value <= alpha)
 			{
-				skipped++;
 				return value;
 			}
-			continued++;
 			last = stateValue.getLastExpanded() + 1;
 		}
 		else {
@@ -131,7 +125,7 @@ public class CachedAlphaBetaSearchAux {
 			son.getState().applyAction();
 			value = Math.min(value, maxValue( son, alpha, beta, depth+1));
 			if (value <= alpha){
-				currentNode.getState().setValue(value);
+				//currentNode.getState().setValue(value);
 				alreadyExpanded[depth].put(currentNode.getState(), new StateValue(false, false, value, i));  
 				return value;
 			}

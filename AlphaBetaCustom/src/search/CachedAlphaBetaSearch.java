@@ -25,7 +25,8 @@ public class CachedAlphaBetaSearch {
 
 		double resultValue = Double.NEGATIVE_INFINITY;
 		root.getState().restoreState();
-
+		root.getState().setPhase();
+		
 		for (Node son : root.getSons()) {
 			son.getState().applyAction();
 			double value = minValue(son,Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1);
@@ -64,7 +65,7 @@ public class CachedAlphaBetaSearch {
 			son.getState().applyAction();
 			value = Math.max(value, minValue( son, alpha, beta, depth+1));
 			if (value >= beta){
-				currentNode.getState().setValue(value);
+				//currentNode.getState().setValue(value);
 				//Scommentando questa riga va molto pi� veloce, ma rincretinisce, cosa c'� di sbagliato?
 				alreadyExpanded[depth].put(currentNode.getState(), value);
 				return value;
@@ -100,7 +101,7 @@ public class CachedAlphaBetaSearch {
 			son.getState().applyAction();
 			value = Math.min(value, maxValue( son, alpha, beta, depth+1));
 			if (value <= alpha){
-				currentNode.getState().setValue(value);
+				//currentNode.getState().setValue(value);
 				//Scommentando questa riga va molto pi� veloce, ma rincretinisce, cosa c'� di sbagliato?
 				alreadyExpanded[depth].put(currentNode.getState(), value);
 				return value;

@@ -21,7 +21,7 @@ public class TimeoutAlphaBetaSearch {
 			private CachedAlphaBetaSearchAux searchEngine=new CachedAlphaBetaSearchAux();
 			@Override
 			public void run(){
-				int temp=currentMaxDepth;
+				int temp=(currentMaxDepth==minDepth)?currentMaxDepth+1:currentMaxDepth;
 				result=searchEngine.getNextMove(TimeoutAlphaBetaSearch.this.root, minDepth);
 				currentMaxDepth=((currentMaxDepth/2)<minDepth)?minDepth:currentMaxDepth/2;
 				
@@ -31,7 +31,6 @@ public class TimeoutAlphaBetaSearch {
 					currentMaxDepth=temp;
 					System.out.println("level "+currentMaxDepth+" done");
 					temp++;
-
 				}					
 			}
 		};

@@ -14,6 +14,7 @@ public class MillsState implements IState {
 	private boolean turn;
 	private int piecesToPlace;
 	private MillsBoard board;
+	private int phase;
 	
 	private color[] currentState;
 	private MillsAction action;
@@ -55,11 +56,6 @@ public class MillsState implements IState {
 	}
 
 	@Override
-	public void setValue(double value) {
-		//TODO ????
-	}
-
-	@Override
 	public boolean isTerminal() {
 		return board.isTerminal(turn,piecesToPlace);
 	}
@@ -67,6 +63,22 @@ public class MillsState implements IState {
 	@Override
 	public int getPiecesToPlace(){
 		return piecesToPlace;
+	}
+	
+	@Override
+	public void setPhase() {
+		if(piecesToPlace > 0) {
+			phase = 1;
+		} else if(board.isWhitePhaseThree(piecesToPlace)) {
+			phase = 3;
+		} else {
+			phase = 2;
+		}
+	}
+	
+	@Override
+	public int getPhase() {
+		return phase;
 	}
 	
 	@Override
@@ -132,8 +144,4 @@ public class MillsState implements IState {
 			return false;
 		return true;
 	}
-
-
-
-
 }

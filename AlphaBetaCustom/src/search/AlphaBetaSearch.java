@@ -13,7 +13,8 @@ public class AlphaBetaSearch {
 
 		double resultValue = Double.NEGATIVE_INFINITY;
 		root.getState().restoreState();
-
+		root.getState().setPhase();
+		
 		for (Node son : root.getSons()) {
 			son.getState().applyAction();
 			double value = minValue(son,Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1);
@@ -40,7 +41,7 @@ public class AlphaBetaSearch {
 			son.getState().applyAction();
 			value = Math.max(value, minValue( son, alpha, beta, depth+1));
 			if (value >= beta){
-				currentNode.getState().setValue(value);
+				//currentNode.getState().setValue(value);
 				return value;
 			}
 			currentNode.getState().restoreState();
@@ -62,7 +63,7 @@ public class AlphaBetaSearch {
 			son.getState().applyAction();
 			value = Math.min(value, maxValue( son, alpha, beta, depth+1));
 			if (value <= alpha){
-				currentNode.getState().setValue(value);
+				//currentNode.getState().setValue(value);
 				return value;
 			}
 			currentNode.getState().restoreState();

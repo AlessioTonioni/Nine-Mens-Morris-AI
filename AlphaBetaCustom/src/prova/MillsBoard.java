@@ -94,7 +94,7 @@ public class MillsBoard {
 		return (sum/3)+((sum%3==0)?0:1);
 	}
 	
-	private boolean isWhitePhaseThree(int piecesToPlace) {
+	public boolean isWhitePhaseThree(int piecesToPlace) {
 		return piecesToPlace < 0 && white.size() <= 3;
 	}
 	
@@ -186,6 +186,10 @@ public class MillsBoard {
 				}
 			}
 		}
+		if(result.size() == 0) {
+			return generateDelete(action, turn, true);
+		}
+		
 		return result;
 	}
 

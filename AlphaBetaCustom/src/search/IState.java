@@ -8,12 +8,13 @@ public interface IState {
 	boolean isMax();
 	double getFinalValue();  //dovrà ritornarlo se già calcolato, calcolarlo altrimenti
 	double getCutValue();
-	void setValue(double value);
 	boolean isTerminal();
 	List<IState> getAvailableMoves();
 	IAction getGeneratingMove();
 	void restoreState();
 	void applyAction();
 	int getPiecesToPlace();
+	void setPhase();
+	int getPhase();
 	
 }

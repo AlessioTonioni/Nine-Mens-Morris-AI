@@ -26,12 +26,12 @@ public class Main {
 		
 		Board grafica=new Board(".");
 		grafica.SetMove(-1, -1, 1, 1, -1, -1,"X");
-		color[]  board={	color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
+		/*color[]  board={	color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
 							color.empty,color.black,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,
 							color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty,color.empty};
-		
-		//Node root=createInitialNode(false);
-		Node root = createInitialNode(false,board);
+		*/
+		Node root=createInitialNode(false);
+		//Node root = createInitialNode(false,board);
 		//Node root = createInitialNode(true);
 		
 		//CachedAlphaBetaSearch search = new CachedAlphaBetaSearch();
@@ -88,14 +88,6 @@ public class Main {
 	
 	private static Node createInitialNode(boolean isTreeEnabled){
 		MillsState initialState=new MillsState(true,18);
-		if(isTreeEnabled)
-			return new TreeNode(initialState);
-		else
-			return new SimpleNode(initialState);
-	}
-	
-	private static Node createInitialNode(boolean isTreeEnabled, color[] board){
-		MillsState initialState=new MillsState(true,17,board,null);
 		if(isTreeEnabled)
 			return new TreeNode(initialState);
 		else
