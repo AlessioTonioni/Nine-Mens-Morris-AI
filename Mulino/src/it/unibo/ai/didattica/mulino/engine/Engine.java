@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import it.unibo.ai.didattica.mulino.actions.Action;
 import it.unibo.ai.didattica.mulino.actions.Phase1;
+import it.unibo.ai.didattica.mulino.actions.Phase2;
+import it.unibo.ai.didattica.mulino.actions.PhaseFinal;
 import it.unibo.ai.didattica.mulino.domain.State;
 import it.unibo.ai.didattica.mulino.gui.GUI;
 
@@ -47,7 +49,8 @@ public class Engine {
 		TCPInput blackRunner = new TCPInput(blackSocket);
 		TCPInput tin = null;
 		
-		while (currentState.getCurrentPhase() != State.Phase.SECOND) {
+		//while (currentState.getCurrentPhase() != State.Phase.SECOND) {
+		while (true) {
 			System.out.println("Waiting for " + currentPlayer.toString() + " move...");
 			switch (currentPlayer) {
 				case WHITE:
@@ -79,7 +82,21 @@ public class Engine {
 			}
 			try {
 				System.out.println("Player " + currentPlayer.toString() + " move: ");
-				currentState = Phase1.applyMove(currentState, currentAction, currentPlayer);
+				switch (currentState.getCurrentPhase()) {
+					case FIRST :
+						currentState = Phase1.applyMove(currentState, currentAction, currentPlayer);
+						break;
+					case SECOND :
+						currentState = Phase2.applyMove(currentState, currentAction, currentPlayer);
+						break;
+					case FINAL :
+						currentState = PhaseFinal.applyMove(currentState, currentAction, currentPlayer);
+						break;
+					default:
+						System.out.println("Phase not recognize...");
+						System.exit(-10);
+				}
+				
 				whiteSocket.writeState(currentState);
 				blackSocket.writeState(currentState);
 				System.out.println(currentState.toString());
@@ -91,8 +108,8 @@ public class Engine {
 			currentPlayer = (currentPlayer== State.Checker.WHITE) ? State.Checker.BLACK : State.Checker.WHITE;
 		}
 		
-		System.out.println("Game finished! State:");
-		System.out.println(currentState.toString());
+//		System.out.println("Game finished! State:");
+//		System.out.println(currentState.toString());
 	}
 	
 	

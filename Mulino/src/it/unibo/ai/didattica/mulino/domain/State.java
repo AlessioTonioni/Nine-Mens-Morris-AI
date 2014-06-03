@@ -49,8 +49,15 @@ public class State implements Serializable {
 	private int whiteCheckers = 9;
 	private int blackCheckers = 9;
 	
+	private int whiteCheckersOnBoard = 0;
+	private int blackCheckersOnBoard = 0;
+	
 	
 		
+	
+
+
+
 	public State() {
 		// init the board
 		for (String s : positions)
@@ -70,6 +77,11 @@ public class State implements Serializable {
 		result.append("2 |--" + board.get("b2") + "-----" + board.get("d2") + "-----" + board.get("f2") + "--|\n");
 		result.append("1 " + board.get("a1") + "--------" + board.get("d1") + "--------" + board.get("g1") + "\n");
 		result.append("  a  b  c  d  e  f  g\n");
+		result.append("Phase: " + currentPhase.toString() + ";\n");
+		result.append("White Checkers: " + whiteCheckers + ";\n");
+		result.append("Black Checkers: " + blackCheckers + ";\n");
+		result.append("White Checkers On Board: " + whiteCheckersOnBoard + ";\n");
+		result.append("Black Checkers On Board: " + blackCheckersOnBoard + ";\n");
 		return result.toString();
 	}
 	
@@ -92,7 +104,32 @@ public class State implements Serializable {
 	public int getBlackCheckers() { return blackCheckers; }
 	public void setBlackCheckers(int blackCheckers) { this.blackCheckers = blackCheckers; }
 	
+	public int getWhiteCheckersOnBoard() { return whiteCheckersOnBoard; }
+	public void setWhiteCheckersOnBoard(int whiteCheckersOnBoard) { this.whiteCheckersOnBoard = whiteCheckersOnBoard; }
+
+	public int getBlackCheckersOnBoard() { return blackCheckersOnBoard; }
+	public void setBlackCheckersOnBoard(int blackCheckersOnBoard) { this.blackCheckersOnBoard = blackCheckersOnBoard; }
 	
+	
+	
+	public State clone() {
+		// generate the new State
+		State result = new State();
+				
+		// replicate the current board
+		result.getBoard().putAll(this.getBoard());
+
+		// update the checkers available to the players
+		result.setWhiteCheckers(this.getWhiteCheckers());
+		result.setBlackCheckers(this.getBlackCheckers());
+		result.setWhiteCheckersOnBoard(this.getWhiteCheckersOnBoard());
+		result.setBlackCheckersOnBoard(this.getBlackCheckersOnBoard());
+		
+		// update the phase
+		result.setCurrentPhase(this.getCurrentPhase());
+		
+		return result;
+	}
 	
 	
 	

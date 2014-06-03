@@ -1,6 +1,6 @@
 package it.unibo.ai.didattica.mulino.actions;
 
-import it.unibo.ai.didattica.mulino.domain.State;
+
 
 public class TryingToRemoveCheckerInTripleException extends Exception {
 	

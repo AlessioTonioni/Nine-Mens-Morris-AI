@@ -52,17 +52,8 @@ public class MulinoClient {
 	public State.Checker getPlayer() { return player; }
 	public void setPlayer(State.Checker player) { this.player = player; }
 	
-	
-	
-	
-	
-	
-	
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 		State.Checker player;
-		
-		//args = new String[1];
-		//args[0] = "White";
 		
 		if (args.length==0) {
 			System.out.println("You must specify which player you are (Wthie or Black)!");
