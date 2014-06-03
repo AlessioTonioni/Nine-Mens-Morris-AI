@@ -49,7 +49,6 @@ public class Engine {
 		TCPInput blackRunner = new TCPInput(blackSocket);
 		TCPInput tin = null;
 		
-		//while (currentState.getCurrentPhase() != State.Phase.SECOND) {
 		while (true) {
 			System.out.println("Waiting for " + currentPlayer.toString() + " move...");
 			switch (currentPlayer) {
@@ -66,7 +65,8 @@ public class Engine {
 			t.start();
 			
 			try {
-				int counter = 0;
+				int counter;
+				counter = 0;
 				while (counter<delay && t.isAlive()) {
 					Thread.sleep(1000);
 					counter++;
@@ -81,7 +81,7 @@ public class Engine {
 				System.exit(0);
 			}
 			try {
-				System.out.println("Player " + currentPlayer.toString() + " move: ");
+				System.out.println("Player " + currentPlayer.toString() + " move: " + currentAction.toString());
 				switch (currentState.getCurrentPhase()) {
 					case FIRST :
 						currentState = Phase1.applyMove(currentState, currentAction, currentPlayer);

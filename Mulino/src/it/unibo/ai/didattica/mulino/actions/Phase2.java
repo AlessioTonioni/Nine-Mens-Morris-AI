@@ -30,18 +30,13 @@ public class Phase2 {
 		// initial checks
 		initialChecks(currentState, currentAction, checker);
 		
-		
 		// generate the new State
-		State result = new State();
+		State result = currentState.clone();
 		
-		// replicate the current board
-		result.getBoard().putAll(currentState.getBoard());
-
 		// move the checker on the board
 		result.getBoard().put(currentAction.getTo(), checker);
 		result.getBoard().put(currentAction.getFrom(), State.Checker.EMPTY);
 
-		
 		// check if this move allows to remove an opponent checker
 		if (Util.hasCompletedTriple(result, currentAction.getTo(), checker)) {
 			int opponentCheckersOnBoard = (checker== State.Checker.WHITE) ? result.getBlackCheckersOnBoard() : result.getWhiteCheckersOnBoard();
@@ -52,6 +47,8 @@ public class Phase2 {
 				System.exit(100);
 			}
 		}
+		
+		
 		
 		// set the phase
 		if (result.getWhiteCheckersOnBoard() == 3 || result.getBlackCheckersOnBoard() == 3)

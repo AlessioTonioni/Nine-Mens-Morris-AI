@@ -52,6 +52,12 @@ public class MulinoClient {
 	public State.Checker getPlayer() { return player; }
 	public void setPlayer(State.Checker player) { this.player = player; }
 	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 		State.Checker player;
 		

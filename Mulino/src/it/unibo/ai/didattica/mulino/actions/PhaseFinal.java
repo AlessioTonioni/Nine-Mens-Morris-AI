@@ -31,11 +31,8 @@ public class PhaseFinal {
 		
 		
 		// generate the new State
-		State result = new State();
+		State result = currentState.clone();
 		
-		// replicate the current board
-		result.getBoard().putAll(currentState.getBoard());
-
 		// move the checker on the board
 		result.getBoard().put(currentAction.getTo(), checker);
 		result.getBoard().put(currentAction.getFrom(), State.Checker.EMPTY);
