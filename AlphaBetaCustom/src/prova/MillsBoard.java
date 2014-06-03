@@ -98,7 +98,7 @@ public class MillsBoard {
 		return piecesToPlace < 0 && white.size() <= 3;
 	}
 	
-	private boolean isBlackPhaseThree(int piecesToPlace) {
+	public boolean isBlackPhaseThree(int piecesToPlace) {
 		return piecesToPlace < 0 && black.size() <= 3;
 	}
 

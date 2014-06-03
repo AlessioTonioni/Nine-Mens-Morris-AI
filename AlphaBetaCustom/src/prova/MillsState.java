@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import prova.MillsBoard.color;
 import mills.MillsAction;
+import prova.MillsBoard.color;
 import search.IAction;
 import search.IState;
 
@@ -69,7 +69,7 @@ public class MillsState implements IState {
 	public void setPhase() {
 		if(piecesToPlace > 0) {
 			phase = 1;
-		} else if(board.isWhitePhaseThree(piecesToPlace)) {
+		} else if(board.isWhitePhaseThree(piecesToPlace) || board.isBlackPhaseThree(piecesToPlace)) {
 			phase = 3;
 		} else {
 			phase = 2;
