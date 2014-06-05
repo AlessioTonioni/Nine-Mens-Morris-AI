@@ -1,4 +1,4 @@
-package stato;
+package state;
 
 import java.util.ArrayList;
 import java.util.HashMap;

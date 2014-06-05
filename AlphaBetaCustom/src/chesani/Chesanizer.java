@@ -10,11 +10,11 @@ import it.unibo.ai.didattica.mulino.domain.State.Checker;
 import java.util.HashMap;
 import java.util.Map;
 
+import state.MillsState;
+import state.MillsBoard.color;
 import mills.MillsAction;
 import node.Node;
 import node.SimpleNode;
-import stato.MillsState;
-import stato.MillsBoard.color;
 
 public class Chesanizer {
 	private Map<Integer, String> chesanizer;

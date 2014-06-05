@@ -1,4 +1,4 @@
-package stato;
+package state;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.List;
 import mills.MillsAction;
 import search.IAction;
 import search.IState;
-import stato.MillsBoard.color;
+import state.MillsBoard.color;
 
 public class MillsState implements IState {
 	

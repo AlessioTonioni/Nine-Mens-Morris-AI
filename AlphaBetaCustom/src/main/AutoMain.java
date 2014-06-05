@@ -2,26 +2,18 @@ package main;
 
 import graphic.Board;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import mills.MillsAction;
 import node.Node;
 import node.SimpleNode;
 import node.TreeNode;
-import search.AlphaBetaSearch;
-import search.CachedAlphaBetaSearch;
 import search.IAction;
-import search.MinMaxSearch;
 import search.TimeoutAlphaBetaSearch;
-import stato.MillsBoard;
-import stato.MillsState;
-import stato.MillsBoard.color;
+import state.MillsBoard;
+import state.MillsBoard.color;
+import state.MillsState;
 
 public class AutoMain {
 	public static void main(String[] args) throws InterruptedException {

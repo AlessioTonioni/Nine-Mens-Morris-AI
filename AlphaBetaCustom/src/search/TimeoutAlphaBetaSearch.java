@@ -19,6 +19,9 @@ public class TimeoutAlphaBetaSearch {
 
 		Thread t1 = new Thread(){
 			private CachedAlphaBetaSearchAux searchEngine=new CachedAlphaBetaSearchAux();
+			//private CachedAlphaBeta searchEngine=new CachedAlphaBeta();
+			//private AlphaBetaSearch searchEngine=new AlphaBeta();
+			
 			@Override
 			public void run(){
 				int temp=(currentMaxDepth==minDepth)?currentMaxDepth+1:currentMaxDepth;
