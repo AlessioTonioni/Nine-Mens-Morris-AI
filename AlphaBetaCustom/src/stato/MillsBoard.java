@@ -1,4 +1,4 @@
-package prova;
+package stato;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -2,7 +2,7 @@ package mills;
 
 import java.util.Map;
 
-import prova.MillsBoard;
+import stato.MillsBoard;
 
 public class MiddleExternalBox extends Box {
 

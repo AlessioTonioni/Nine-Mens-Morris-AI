@@ -13,8 +13,8 @@ import java.util.Map;
 import mills.MillsAction;
 import node.Node;
 import node.SimpleNode;
-import prova.MillsState;
-import prova.MillsBoard.color;
+import stato.MillsState;
+import stato.MillsBoard.color;
 
 public class Chesanizer {
 	private Map<Integer, String> chesanizer;

@@ -14,14 +14,14 @@ import mills.MillsAction;
 import node.Node;
 import node.SimpleNode;
 import node.TreeNode;
-import prova.MillsBoard;
-import prova.MillsBoard.color;
-import prova.MillsState;
 import search.AlphaBetaSearch;
 import search.CachedAlphaBetaSearch;
 import search.IAction;
 import search.MinMaxSearch;
 import search.TimeoutAlphaBetaSearch;
+import stato.MillsBoard;
+import stato.MillsState;
+import stato.MillsBoard.color;
 
 public class AutoMain {
 	public static void main(String[] args) throws InterruptedException {

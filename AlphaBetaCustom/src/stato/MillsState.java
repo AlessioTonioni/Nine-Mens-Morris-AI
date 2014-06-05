@@ -1,13 +1,13 @@
-package prova;
+package stato;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import mills.MillsAction;
-import prova.MillsBoard.color;
 import search.IAction;
 import search.IState;
+import stato.MillsBoard.color;
 
 public class MillsState implements IState {
 	
