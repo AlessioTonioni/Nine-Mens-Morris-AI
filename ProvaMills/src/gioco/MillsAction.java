@@ -1,6 +1,6 @@
 package gioco;
 
-public class MillsAction implements Cloneable {
+public class MillsAction implements Cloneable { //ciao
 
 	private int XFrom;
 	private int YFrom;
